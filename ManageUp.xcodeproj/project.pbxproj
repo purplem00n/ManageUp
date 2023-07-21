@@ -13,7 +13,7 @@
 		5C48B1122A6AEBA9004A8E42 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C48B1102A6AEBA9004A8E42 /* Main.storyboard */; };
 		5C48B1142A6AEBAA004A8E42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C48B1132A6AEBAA004A8E42 /* Assets.xcassets */; };
 		5C48B1172A6AEBAA004A8E42 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C48B1152A6AEBAA004A8E42 /* LaunchScreen.storyboard */; };
-		5C48B1222A6B0F38004A8E42 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1212A6B0F38004A8E42 /* FormViewController.swift */; };
+		5C48B1242A6B36BF004A8E42 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1232A6B36BF004A8E42 /* FormViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +25,7 @@
 		5C48B1132A6AEBAA004A8E42 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5C48B1162A6AEBAA004A8E42 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5C48B1182A6AEBAA004A8E42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5C48B1212A6B0F38004A8E42 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FormViewController.swift; path = ManageUp/Views/FormViewController.swift; sourceTree = SOURCE_ROOT; };
+		5C48B1232A6B36BF004A8E42 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,7 +88,7 @@
 		5C48B1202A6B0D48004A8E42 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				5C48B1212A6B0F38004A8E42 /* FormViewController.swift */,
+				5C48B1232A6B36BF004A8E42 /* FormViewController.swift */,
 				5C48B10E2A6AEBA9004A8E42 /* ViewController.swift */,
 			);
 			path = Controllers;
@@ -167,7 +167,7 @@
 			files = (
 				5C48B10F2A6AEBA9004A8E42 /* ViewController.swift in Sources */,
 				5C48B10B2A6AEBA9004A8E42 /* AppDelegate.swift in Sources */,
-				5C48B1222A6B0F38004A8E42 /* FormViewController.swift in Sources */,
+				5C48B1242A6B36BF004A8E42 /* FormViewController.swift in Sources */,
 				5C48B10D2A6AEBA9004A8E42 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
