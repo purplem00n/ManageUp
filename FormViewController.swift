@@ -9,13 +9,19 @@ import UIKit
 
 class FormViewController: UIViewController {
 
+    
+    @IBOutlet weak var entryText: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
     
-
+    @IBAction func submitPressed(_ sender: UIButton) {
+        print(entryText.text!)
+    }
+    
     /*
     // MARK: - Navigation
 
