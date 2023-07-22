@@ -15,9 +15,6 @@ class HomeViewController: UIViewController {
     }
 
     @IBAction func addEntryPressed(_ sender: UIButton) {
-        
-        self.performSegue(withIdentifier: "goToEntryForm", sender: self)
-        
     }
     
 }

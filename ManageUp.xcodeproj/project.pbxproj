@@ -14,6 +14,9 @@
 		5C48B1142A6AEBAA004A8E42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C48B1132A6AEBAA004A8E42 /* Assets.xcassets */; };
 		5C48B1172A6AEBAA004A8E42 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C48B1152A6AEBAA004A8E42 /* LaunchScreen.storyboard */; };
 		5C48B1242A6B36BF004A8E42 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1232A6B36BF004A8E42 /* FormViewController.swift */; };
+		5C48B1262A6B5C85004A8E42 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1252A6B5C85004A8E42 /* WelcomeViewController.swift */; };
+		5C48B1282A6B5D30004A8E42 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1272A6B5D30004A8E42 /* RegisterViewController.swift */; };
+		5C48B12A2A6B5D56004A8E42 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1292A6B5D56004A8E42 /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		5C48B1162A6AEBAA004A8E42 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5C48B1182A6AEBAA004A8E42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5C48B1232A6B36BF004A8E42 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = SOURCE_ROOT; };
+		5C48B1252A6B5C85004A8E42 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WelcomeViewController.swift; path = ManageUp/Views/WelcomeViewController.swift; sourceTree = SOURCE_ROOT; };
+		5C48B1272A6B5D30004A8E42 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RegisterViewController.swift; path = ManageUp/Views/RegisterViewController.swift; sourceTree = SOURCE_ROOT; };
+		5C48B1292A6B5D56004A8E42 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ManageUp/Views/LoginViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +94,9 @@
 		5C48B1202A6B0D48004A8E42 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				5C48B1292A6B5D56004A8E42 /* LoginViewController.swift */,
+				5C48B1272A6B5D30004A8E42 /* RegisterViewController.swift */,
+				5C48B1252A6B5C85004A8E42 /* WelcomeViewController.swift */,
 				5C48B1232A6B36BF004A8E42 /* FormViewController.swift */,
 				5C48B10E2A6AEBA9004A8E42 /* ViewController.swift */,
 			);
@@ -165,8 +174,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C48B12A2A6B5D56004A8E42 /* LoginViewController.swift in Sources */,
 				5C48B10F2A6AEBA9004A8E42 /* ViewController.swift in Sources */,
+				5C48B1262A6B5C85004A8E42 /* WelcomeViewController.swift in Sources */,
 				5C48B10B2A6AEBA9004A8E42 /* AppDelegate.swift in Sources */,
+				5C48B1282A6B5D30004A8E42 /* RegisterViewController.swift in Sources */,
 				5C48B1242A6B36BF004A8E42 /* FormViewController.swift in Sources */,
 				5C48B10D2A6AEBA9004A8E42 /* SceneDelegate.swift in Sources */,
 			);
