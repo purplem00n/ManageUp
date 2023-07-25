@@ -17,9 +17,13 @@
 		5C48B1262A6B5C85004A8E42 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1252A6B5C85004A8E42 /* WelcomeViewController.swift */; };
 		5C48B1282A6B5D30004A8E42 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1272A6B5D30004A8E42 /* RegisterViewController.swift */; };
 		5C48B12A2A6B5D56004A8E42 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1292A6B5D56004A8E42 /* LoginViewController.swift */; };
+		5C48B12C2A6B64B2004A8E42 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5C48B12B2A6B64B1004A8E42 /* GoogleService-Info.plist */; };
+		DB174A774D81CAF72276EE12 /* Pods_ManageUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F01EDAC3AAE203D832A9C /* Pods_ManageUp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2CF086BFB9B791BC02B35F68 /* Pods-ManageUp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManageUp.debug.xcconfig"; path = "Target Support Files/Pods-ManageUp/Pods-ManageUp.debug.xcconfig"; sourceTree = "<group>"; };
+		4E5FCAF4C8246F1337C52390 /* Pods-ManageUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManageUp.release.xcconfig"; path = "Target Support Files/Pods-ManageUp/Pods-ManageUp.release.xcconfig"; sourceTree = "<group>"; };
 		5C48B1072A6AEBA9004A8E42 /* ManageUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ManageUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C48B10A2A6AEBA9004A8E42 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5C48B10C2A6AEBA9004A8E42 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -32,6 +36,8 @@
 		5C48B1252A6B5C85004A8E42 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WelcomeViewController.swift; path = ManageUp/Views/WelcomeViewController.swift; sourceTree = SOURCE_ROOT; };
 		5C48B1272A6B5D30004A8E42 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RegisterViewController.swift; path = ManageUp/Views/RegisterViewController.swift; sourceTree = SOURCE_ROOT; };
 		5C48B1292A6B5D56004A8E42 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ManageUp/Views/LoginViewController.swift; sourceTree = SOURCE_ROOT; };
+		5C48B12B2A6B64B1004A8E42 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C18F01EDAC3AAE203D832A9C /* Pods_ManageUp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ManageUp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -39,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB174A774D81CAF72276EE12 /* Pods_ManageUp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +57,8 @@
 			children = (
 				5C48B1092A6AEBA9004A8E42 /* ManageUp */,
 				5C48B1082A6AEBA9004A8E42 /* Products */,
+				7321B70A25572E31B1B73E32 /* Pods */,
+				C1031093E89C00349AE06B11 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -72,6 +81,7 @@
 				5C48B1132A6AEBAA004A8E42 /* Assets.xcassets */,
 				5C48B1152A6AEBAA004A8E42 /* LaunchScreen.storyboard */,
 				5C48B1182A6AEBAA004A8E42 /* Info.plist */,
+				5C48B12B2A6B64B1004A8E42 /* GoogleService-Info.plist */,
 			);
 			path = ManageUp;
 			sourceTree = "<group>";
@@ -103,6 +113,23 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		7321B70A25572E31B1B73E32 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2CF086BFB9B791BC02B35F68 /* Pods-ManageUp.debug.xcconfig */,
+				4E5FCAF4C8246F1337C52390 /* Pods-ManageUp.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		C1031093E89C00349AE06B11 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C18F01EDAC3AAE203D832A9C /* Pods_ManageUp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -110,9 +137,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5C48B11B2A6AEBAA004A8E42 /* Build configuration list for PBXNativeTarget "ManageUp" */;
 			buildPhases = (
+				9D56435D3F4E6D463740871D /* [CP] Check Pods Manifest.lock */,
 				5C48B1032A6AEBA9004A8E42 /* Sources */,
 				5C48B1042A6AEBA9004A8E42 /* Frameworks */,
 				5C48B1052A6AEBA9004A8E42 /* Resources */,
+				3A5E492EDAD38735685C064E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -147,6 +176,9 @@
 				Base,
 			);
 			mainGroup = 5C48B0FE2A6AEBA9004A8E42;
+			packageReferences = (
+				5CD68B332A6EF4D900F3F0F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 5C48B1082A6AEBA9004A8E42 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -162,12 +194,55 @@
 			buildActionMask = 2147483647;
 			files = (
 				5C48B1172A6AEBAA004A8E42 /* LaunchScreen.storyboard in Resources */,
+				5C48B12C2A6B64B2004A8E42 /* GoogleService-Info.plist in Resources */,
 				5C48B1142A6AEBAA004A8E42 /* Assets.xcassets in Resources */,
 				5C48B1122A6AEBA9004A8E42 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3A5E492EDAD38735685C064E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ManageUp/Pods-ManageUp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ManageUp/Pods-ManageUp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ManageUp/Pods-ManageUp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9D56435D3F4E6D463740871D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ManageUp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5C48B1032A6AEBA9004A8E42 /* Sources */ = {
@@ -322,6 +397,7 @@
 		};
 		5C48B11C2A6AEBAA004A8E42 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2CF086BFB9B791BC02B35F68 /* Pods-ManageUp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -350,6 +426,7 @@
 		};
 		5C48B11D2A6AEBAA004A8E42 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4E5FCAF4C8246F1337C52390 /* Pods-ManageUp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -398,6 +475,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5CD68B332A6EF4D900F3F0F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 5C48B0FF2A6AEBA9004A8E42 /* Project object */;
 }

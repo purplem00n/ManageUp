@@ -89,7 +89,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="BU4-km-bM6">
-                                <rect key="frame" x="46.666666666666657" y="153" width="300" height="178"/>
+                                <rect key="frame" x="46.666666666666657" y="153" width="300" height="208"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1qU-QR-AjS">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="34"/>
@@ -101,15 +101,21 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Xd-vA-ZJg">
+                                        <rect key="frame" x="0.0" y="128" width="300" height="0.0"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8I8-Wf-1nV">
-                                        <rect key="frame" x="0.0" y="128" width="300" height="50"/>
+                                        <rect key="frame" x="0.0" y="158" width="300" height="50"/>
                                         <color key="tintColor" red="0.2901960784" green="0.33333333329999998" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Login">
                                             <fontDescription key="titleFontDescription" type="system" pointSize="30"/>
                                         </buttonConfiguration>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="show" id="yOh-mq-o0u"/>
+                                            <action selector="loginPressed:" destination="8Qh-Dg-lfY" eventType="touchUpInside" id="hEd-w5-OwI"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -126,6 +132,12 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="aaZ-30-NIc"/>
+                    <connections>
+                        <outlet property="emailTextField" destination="1qU-QR-AjS" id="hfI-VW-aGa"/>
+                        <outlet property="errorLabel" destination="5Xd-vA-ZJg" id="kXe-Q8-zUm"/>
+                        <outlet property="passwordTextField" destination="oed-u8-8G9" id="3BH-gu-5ob"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="LoginToHome" id="GkN-cC-dzr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9kr-Sx-qeS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -140,27 +152,33 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="BcJ-jK-836">
-                                <rect key="frame" x="46.666666666666657" y="153" width="300" height="178"/>
+                                <rect key="frame" x="46.666666666666657" y="138" width="300" height="208"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Zv1-du-ZgN">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" textContentType="email"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" textContentType="email"/>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IDk-XU-ka9">
                                         <rect key="frame" x="0.0" y="64" width="300" height="34"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rwb-jp-xWb">
+                                        <rect key="frame" x="0.0" y="128" width="300" height="0.0"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KWw-jI-ExC">
-                                        <rect key="frame" x="0.0" y="128" width="300" height="50"/>
+                                        <rect key="frame" x="0.0" y="158" width="300" height="50"/>
                                         <color key="tintColor" red="0.15686274510000001" green="0.28235294119999998" blue="0.7725490196" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Register">
                                             <fontDescription key="titleFontDescription" type="system" pointSize="30"/>
                                         </buttonConfiguration>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="show" id="RbQ-AK-fps"/>
+                                            <action selector="registerPressed:" destination="xiC-Ld-3Rs" eventType="touchUpInside" id="bFu-MC-niw"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -172,11 +190,17 @@
                         <viewLayoutGuide key="safeArea" id="Xyf-gI-u9w"/>
                         <color key="backgroundColor" red="0.7725490196" green="0.87450980389999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="BcJ-jK-836" firstAttribute="top" secondItem="Xyf-gI-u9w" secondAttribute="top" constant="50" id="Z1b-NJ-GdR"/>
+                            <constraint firstItem="BcJ-jK-836" firstAttribute="top" secondItem="Xyf-gI-u9w" secondAttribute="top" constant="35" id="Z1b-NJ-GdR"/>
                             <constraint firstItem="BcJ-jK-836" firstAttribute="centerX" secondItem="cZq-xv-oBJ" secondAttribute="centerX" id="esJ-15-3l6"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Qmm-ow-5Ga"/>
+                    <connections>
+                        <outlet property="emailTextField" destination="Zv1-du-ZgN" id="for-9c-iga"/>
+                        <outlet property="errorLabel" destination="Rwb-jp-xWb" id="h9N-Vk-l6c"/>
+                        <outlet property="passwordTextField" destination="IDk-XU-ka9" id="564-2V-g8d"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="RegisterToHome" id="aKY-Py-u6n"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zIk-c8-QTu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -301,7 +325,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="yOh-mq-o0u"/>
+        <segue reference="GkN-cC-dzr"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.up" catalog="system" width="118" height="128"/>
