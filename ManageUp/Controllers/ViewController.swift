@@ -19,6 +19,7 @@ class HomeViewController: UIViewController {
     }
 
     @IBAction func addEntryPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: "HomeToForm", sender: self)
     }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
