@@ -17,6 +17,7 @@
 		5C48B1262A6B5C85004A8E42 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1252A6B5C85004A8E42 /* WelcomeViewController.swift */; };
 		5C48B1282A6B5D30004A8E42 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1272A6B5D30004A8E42 /* RegisterViewController.swift */; };
 		5C48B12A2A6B5D56004A8E42 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C48B1292A6B5D56004A8E42 /* LoginViewController.swift */; };
+		5C764F582A707EFD004D4173 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C764F572A707EFD004D4173 /* SearchViewController.swift */; };
 		5CD68B352A703F2100F3F0F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CD68B342A703F2100F3F0F9 /* GoogleService-Info.plist */; };
 		DB174A774D81CAF72276EE12 /* Pods_ManageUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F01EDAC3AAE203D832A9C /* Pods_ManageUp.framework */; };
 /* End PBXBuildFile section */
@@ -36,6 +37,7 @@
 		5C48B1252A6B5C85004A8E42 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WelcomeViewController.swift; path = ManageUp/Views/WelcomeViewController.swift; sourceTree = SOURCE_ROOT; };
 		5C48B1272A6B5D30004A8E42 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RegisterViewController.swift; path = ManageUp/Views/RegisterViewController.swift; sourceTree = SOURCE_ROOT; };
 		5C48B1292A6B5D56004A8E42 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ManageUp/Views/LoginViewController.swift; sourceTree = SOURCE_ROOT; };
+		5C764F572A707EFD004D4173 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = ManageUp/Views/SearchViewController.swift; sourceTree = SOURCE_ROOT; };
 		5CD68B342A703F2100F3F0F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C18F01EDAC3AAE203D832A9C /* Pods_ManageUp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ManageUp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -104,6 +106,7 @@
 		5C48B1202A6B0D48004A8E42 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				5C764F572A707EFD004D4173 /* SearchViewController.swift */,
 				5C48B1292A6B5D56004A8E42 /* LoginViewController.swift */,
 				5C48B1272A6B5D30004A8E42 /* RegisterViewController.swift */,
 				5C48B1252A6B5C85004A8E42 /* WelcomeViewController.swift */,
@@ -251,6 +254,7 @@
 			files = (
 				5C48B12A2A6B5D56004A8E42 /* LoginViewController.swift in Sources */,
 				5C48B10F2A6AEBA9004A8E42 /* ViewController.swift in Sources */,
+				5C764F582A707EFD004D4173 /* SearchViewController.swift in Sources */,
 				5C48B1262A6B5C85004A8E42 /* WelcomeViewController.swift in Sources */,
 				5C48B10B2A6AEBA9004A8E42 /* AppDelegate.swift in Sources */,
 				5C48B1282A6B5D30004A8E42 /* RegisterViewController.swift in Sources */,
