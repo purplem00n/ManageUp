@@ -177,6 +177,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="KYk-Qs-gPD" id="NPb-CM-qG9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1N6-mJ-dTL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -266,6 +269,9 @@
                                         <buttonConfiguration key="configuration" style="filled" title="Search">
                                             <color key="baseBackgroundColor" red="0.2901960784" green="0.33333333329999998" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </buttonConfiguration>
+                                        <connections>
+                                            <action selector="searchPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zlK-t9-N9R"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yFc-t8-WEx">
                                         <rect key="frame" x="0.0" y="70" width="150" height="50"/>
@@ -302,7 +308,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="zmp-3z-I7i" kind="show" identifier="HomeToForm" id="qgk-tc-HRv"/>
-                        <segue destination="NKs-7t-zbA" kind="show" id="idp-ux-xkS"/>
+                        <segue destination="NKs-7t-zbA" kind="show" identifier="HomeToSearch" id="idp-ux-xkS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

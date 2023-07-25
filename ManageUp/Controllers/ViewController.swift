@@ -13,13 +13,17 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // not sure if I want a title, it becomes the text instead of "back" on the following page.
-        title = "Manage Up: Home"
+//        title = "Manage Up: Home"
         navigationItem.hidesBackButton = true
         // Do any additional setup after loading the view.
     }
 
     @IBAction func addEntryPressed(_ sender: UIButton) {
         performSegue(withIdentifier: "HomeToForm", sender: self)
+    }
+    
+    @IBAction func searchPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: "HomeToSearch", sender: self)
     }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
