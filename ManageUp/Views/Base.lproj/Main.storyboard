@@ -214,14 +214,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3h3-0r-1xe">
-                                <rect key="frame" x="0.0" y="81" width="393" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Bl0-Rb-Hbn"/>
-                                </connections>
-                            </searchBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yFc-t8-WEx">
                                 <rect key="frame" x="121.66666666666669" y="752" width="150" height="50"/>
                                 <constraints>
@@ -237,6 +229,14 @@
                                     <segue destination="zmp-3z-I7i" kind="show" identifier="goToEntryForm" id="p5u-Sd-1wF"/>
                                 </connections>
                             </button>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3h3-0r-1xe">
+                                <rect key="frame" x="0.0" y="233" width="393" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Bl0-Rb-Hbn"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.77254901960784317" green="0.87450980392156863" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
@@ -246,7 +246,13 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="gsU-v0-Rp1"/>
+                    <navigationItem key="navigationItem" id="gsU-v0-Rp1">
+                        <barButtonItem key="rightBarButtonItem" title="Logout" id="Qns-jo-CpG">
+                            <connections>
+                                <action selector="logoutPressed:" destination="BYZ-38-t0r" id="qzj-Af-mal"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -296,7 +302,13 @@
                             <constraint firstItem="aOt-5W-dz4" firstAttribute="top" secondItem="36v-8R-KpN" secondAttribute="top" constant="50" id="ubI-aW-pks"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Krl-yk-i2y"/>
+                    <navigationItem key="navigationItem" id="Krl-yk-i2y">
+                        <barButtonItem key="rightBarButtonItem" title="Logout" id="FQh-d7-atj">
+                            <connections>
+                                <action selector="logoutPressed:" destination="zmp-3z-I7i" id="d80-ki-JN3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="entryText" destination="aOt-5W-dz4" id="H87-Id-pRq"/>
                     </connections>
