@@ -110,4 +110,6 @@ iOSInjectionProject/
 /*.gcno
 **/xcshareddata/WorkspaceSettings.xcsettings
 
+# ManageUp.xcworkspace/xcuserdata/arielhiguera.xcuserdatad/UserInterfaceState.xcuserstate
+
 # End of https://www.toptal.com/developers/gitignore/api/swift,cocoapods,xcode

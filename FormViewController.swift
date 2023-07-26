@@ -20,6 +20,7 @@ class FormViewController: UIViewController {
     }
     
     @IBAction func submitPressed(_ sender: UIButton) {
+        let textBody = entryText.text
         print(entryText.text!)
     }
     
