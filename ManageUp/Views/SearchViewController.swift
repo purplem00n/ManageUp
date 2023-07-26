@@ -7,8 +7,11 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class SearchViewController: UIViewController {
+    
+    let db = Firestore.firestore()
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -23,7 +26,26 @@ class SearchViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        // Do any additional setup after loading the view.
+        loadEntries()
+        
+    }
+    
+    func loadEntries() {
+        entries = []
+        db.collection(K.FStore.collectionName).getDocuments() {
+            (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                if let snapshotDocuments = querySnapshot?.documents {
+                    for doc in snapshotDocuments {
+                        let data = doc.data()
+                        let text = data[K.FStore.textField]
+                        print(doc.data())
+                    }
+                }
+            }
+        }
     }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
