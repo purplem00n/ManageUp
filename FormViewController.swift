@@ -14,7 +14,7 @@ class FormViewController: UIViewController {
     
     @IBOutlet weak var entryText: UITextView!
     
-    let db = Firestore.firestore
+    let db = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +24,13 @@ class FormViewController: UIViewController {
     
     @IBAction func submitPressed(_ sender: UIButton) {
         if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
-            db.collection("Entries")
+            db.collection(K.FStore.collectionName).addDocument(data: [K.FStore.textField: entryText.text]) { (error) in
+                if let e = error {
+                    print(e)
+                } else {
+                    print("Successfully saved data")
+                }
+            }
         }
         print(entryText.text!)
     }
