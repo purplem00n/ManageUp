@@ -27,7 +27,7 @@ class LoginViewController: UIViewController {
                     print(e)
                     self.errorLabel.text = e.localizedDescription
                 } else {
-                    self.performSegue(withIdentifier: "LoginToHome", sender: self)
+                    self.performSegue(withIdentifier: loginSegue, sender: self)
                 }
             }
         }

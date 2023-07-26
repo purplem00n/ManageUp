@@ -19,11 +19,11 @@ class HomeViewController: UIViewController {
     }
 
     @IBAction func addEntryPressed(_ sender: UIButton) {
-        performSegue(withIdentifier: "HomeToForm", sender: self)
+        performSegue(withIdentifier: K.formSegue, sender: self)
     }
     
     @IBAction func searchPressed(_ sender: UIButton) {
-        performSegue(withIdentifier: "HomeToSearch", sender: self)
+        performSegue(withIdentifier: K.searchSegue, sender: self)
     }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
