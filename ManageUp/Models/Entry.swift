@@ -9,7 +9,6 @@ import Foundation
 
 struct Entry {
     let user: String
-    let date: Date
     let text: String
     let tags: [String]
 }

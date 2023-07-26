@@ -14,17 +14,22 @@ class FormViewController: UIViewController {
     
     @IBOutlet weak var entryText: UITextView!
     
-    let db = Firestore.firestore
+    let db = Firestore.firestore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func submitPressed(_ sender: UIButton) {
         if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
-            db.collection("Entries")
+            db.collection(K.FStore.collectionName).addDocument(data: [K.FStore.textField: textBody, K.FStore.dateField: Date.now, K.FStore.userField: user, K.FStore.tagsField: ["Example Tag"]]) { (error) in
+                if let e = error {
+                    print(e)
+                } else {
+                    print("Successfully saved data")
+                }
+            }
         }
         print(entryText.text!)
     }
@@ -37,14 +42,5 @@ class FormViewController: UIViewController {
           print("Error signing out: %@", signOutError)
         }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
