@@ -15,11 +15,13 @@ class SearchViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    var entries: [Entry] = [
-        Entry(user:"1@2.com", date: Date.now, text: "This is a test entry", tags:["success", "capstone"]),
-        Entry(user:"1@2.com", date: Date.now, text: "Add entries to table view", tags: ["success", "organization"]),
-        Entry(user: "1@2.com", date: Date.now, text: "Complete another story!", tags: ["accomplishment"])
-    ]
+    var entries: [Entry] = []
+//    [
+//        Entry(user:"1@2.com", date: Date.now, text: "This is a test entry", tags:["success", "capstone"]),
+//        Entry(user:"1@2.com", date: Date.now, text: "Add entries to table view", tags: ["success", "organization"]),
+//        Entry(user: "1@2.com", date: Date.now, text: "Complete another story!", tags: ["accomplishment"])
+//    ]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,17 +33,26 @@ class SearchViewController: UIViewController {
     }
     
     func loadEntries() {
-        entries = []
-        db.collection(K.FStore.collectionName).getDocuments() {
+
+        db.collection(K.FStore.collectionName).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
+
+            self.entries = []
+
+            if let e = err {
+                print("Error getting documents: \(e)")
             } else {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
-                        let text = data[K.FStore.textField]
-                        print(doc.data())
+                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String] {
+                            let newEntry = Entry(user: user, text: text, tags: tags)
+                            self.entries.append(newEntry)
+
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
+                            } // this makes sure the table updates with the most current data.
+                        }
                     }
                 }
             }
@@ -56,17 +67,6 @@ class SearchViewController: UIViewController {
           print("Error signing out: %@", signOutError)
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 //populates table view
@@ -78,6 +78,7 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell")
         cell?.textLabel?.text = entries[indexPath.row].text
+//        cell?.textLabel?.text = K.FStore.collectionName[indexPath.row].data.textField
         return cell!
     }
     
