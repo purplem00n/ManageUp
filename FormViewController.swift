@@ -7,11 +7,14 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class FormViewController: UIViewController {
 
     
     @IBOutlet weak var entryText: UITextView!
+    
+    let db = Firestore.firestore
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +23,9 @@ class FormViewController: UIViewController {
     }
     
     @IBAction func submitPressed(_ sender: UIButton) {
-        let textBody = entryText.text
+        if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
+            db.collection("Entries")
+        }
         print(entryText.text!)
     }
     

@@ -28,7 +28,7 @@ class RegisterViewController: UIViewController {
                     self.errorLabel.text = e.localizedDescription
                 } else {
                     // Navigate to the Home page
-                    self.performSegue(withIdentifier: "RegisterToHome", sender: self)
+                    self.performSegue(withIdentifier: K.registerSegue, sender: self)
                 }
             }
         }
