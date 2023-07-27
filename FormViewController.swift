@@ -76,7 +76,10 @@ extension FormViewController: UITableViewDataSource {
 
 extension FormViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: this function is where I can tell it what to do when the user clicks on an entry listed in the table
-        print(indexPath.row)
+        // remove tag item when the user clicks on an entry listed in the table
+        if let newTag = tagEntryField.text {
+            tags.remove(at: indexPath.row)
+        }
+        tagTableView.reloadData()
     }
 }
