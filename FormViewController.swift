@@ -24,7 +24,7 @@ class FormViewController: UIViewController {
         super.viewDidLoad()
         tagTableView.delegate = self
         tagTableView.dataSource = self
-
+        
     }
 
     
@@ -77,9 +77,7 @@ extension FormViewController: UITableViewDataSource {
 extension FormViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // remove tag item when the user clicks on an entry listed in the table
-        if let newTag = tagEntryField.text {
-            tags.remove(at: indexPath.row)
-        }
+        tags.remove(at: indexPath.row)
         tagTableView.reloadData()
     }
 }
