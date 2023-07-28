@@ -12,12 +12,12 @@ import FirebaseFirestore
 class SearchViewController: UIViewController, UISearchResultsUpdating {
     
     let db = Firestore.firestore()
-
+    
     @IBOutlet weak var tableView: UITableView!
     
     let searchController = UISearchController()
     var entries: [Entry] = []
-    var allTags: [String] = []
+    var allTags: [String: String] = [:]
     
     
     override func viewDidLoad() {
@@ -31,27 +31,26 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         navigationItem.searchController = searchController
         
         loadEntries()
-//        getAllTags()
-        queryForAllTags()
+        getAllTags()
+        //        queryForAllTags()
     }
     
     func loadEntries() {
-
-        db.collection(K.FStore.collectionName).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
-
+            
             self.entries = []
-
+            
             if let e = err {
                 print("Error getting documents: \(e)")
             } else {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
-                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String] {
+                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String : String] {
                             let newEntry = Entry(user: user, text: text, tags: tags)
                             self.entries.append(newEntry)
-
+                            
                             DispatchQueue.main.async {
                                 self.tableView.reloadData()
                             } // this makes sure the table updates with the most current data.
@@ -66,41 +65,43 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         let snapshotDocuments = db.collection(K.FStore.collectionName)
         snapshotDocuments.getDocuments { querySnapshot, error in
             
-            self.allTags = []
+            self.allTags = [:]
             
             if let e = error {
                 print(e)
             } else {
                 for document in querySnapshot!.documents {
                     let entry = document.data()
-                    if let tags = entry["tags"] as? [String] {
-                        for tag in tags {
-                            if !self.allTags.contains(tag) {
-                                self.allTags.append(tag)
+                    if let tags = entry["tags"] as? [String: String] {
+                        for (tag, color) in tags {
+                            if !self.allTags.contains(where: { $0.key == tag }) {
+                                self.allTags[tag] = color
                             }
                         }
                     }
                 }
             }
-//            print(self.allTags) THIS FUNC WORKS, but I should be using a query instead....
+            print(self.allTags)
+            //            THIS FUNC WORKS, but I should be using a query instead....
         }
     }
-            
-    func queryForAllTags() {
-        let allTagsByQuery = db.collection(K.FStore.collectionName).whereField(K.FStore.tagsField, isNotEqualTo: [] as NSArray)
-        print(allTagsByQuery)
-        let objectType = type(of: allTagsByQuery)
-        print(objectType)
-        //returns a FIRQuery data object. Not sure how to parse this
-        
-    }
+    
+    //    func queryForAllTags() {
+    //        let allTagsByQuery = db.collection(K.FStore.collectionName).whereField(K.FStore.tagsField, isNotEqualTo: [] as NSArray)
+    //        print(allTagsByQuery)
+    //returns a FIRQuery data object. Not sure how to parse this
+    
+    
+    //    func queryForUserEntries {
+    //
+    //    }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {
-        try Auth.auth().signOut()
+            try Auth.auth().signOut()
             navigationController?.popToRootViewController(animated: true)
         } catch let signOutError as NSError {
-          print("Error signing out: %@", signOutError)
+            print("Error signing out: %@", signOutError)
         }
     }
     

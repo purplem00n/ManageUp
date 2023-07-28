@@ -18,7 +18,7 @@ class FormViewController: UIViewController {
     
     let db = Firestore.firestore()
     
-    var tags: [String] = ["success", "or not?"]
+    var tags: [String: String] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,13 +38,15 @@ class FormViewController: UIViewController {
                 }
             }
         }
-        print(entryText.text!)
     }
     
     
     @IBAction func addTagPressed(_ sender: UIButton) {
         if let newTag = tagEntryField.text {
-            tags.append(newTag)
+            
+            // check if new tag is in existing tags, if so do nothing
+            // if not in existing tags:
+            tags[newTag] = "red" // will need to add color: based on a long list of colors, add the color at the following index, and increment the index for next time.
             tagEntryField.text = ""
         }
         tagTableView.reloadData()
@@ -69,15 +71,21 @@ extension FormViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableTagCell")
-        cell?.textLabel?.text = tags[indexPath.row]
+//        cell?.textLabel?.text = ??? // this needs to be the string that is the key in the dictionary, I don't know how to access that, the only way I have is by index
+        // this might not be a problem if I decide another method of adding tags.
+        //doesn't work:
+//        for (key, value) in tags {
+//            cell?.textLabel?.text = key
+//        }
+        // tags[indexPath.row] was what worked when tags was a list instead of dictionary
         return cell!
     }
 }
 
 extension FormViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // remove tag item when the user clicks on an entry listed in the table
-        tags.remove(at: indexPath.row)
+        // remove tag item when the user clicks on an entry listed in the table. Not sure how to access the keyString.
+//        tags.removeValue(forKey: <#T##String#>)
         tagTableView.reloadData()
     }
 }

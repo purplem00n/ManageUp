@@ -5,6 +5,8 @@
 //  Created by Ariel Higuera on 7/26/23.
 //
 
+import UIKit
+
 struct K {
     static let registerSegue = "RegisterToHome"
     static let loginSegue = "LoginToHome"
@@ -19,5 +21,12 @@ struct K {
         static let tagsField = "tags"
         
     }
+    
+//    struct Colors {
+//        let blue = UIColor.blue
+//        let red = UIColor.red
+//        let purple = UIColor.purple
+//        let orange = UIColor.orange
+//    }
     
 }
