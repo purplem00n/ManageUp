@@ -8,6 +8,8 @@ target 'ManageUp' do
   # Pods for ManageUp
 pod 'FirebaseAuth'
 pod 'FirebaseFirestore'
+pod 'IQKeyboardManagerSwift'
+
 
 
 post_install do |installer|
