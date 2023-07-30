@@ -8,23 +8,30 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import iOSDropDown
 
 class FormViewController: UIViewController {
 
-    
+
+    @IBOutlet weak var tagEntryDropDown: DropDown!
     @IBOutlet weak var entryText: UITextView!
-    @IBOutlet weak var tagEntryField: UITextField!
     @IBOutlet weak var tagTableView: UITableView!
     
     let db = Firestore.firestore()
+    var tags: [String] = []
     
-    var tags: [String] = ["success", "or not?"]
+    var allTagsArray: [String] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tagTableView.delegate = self
         tagTableView.dataSource = self
-
+        
+        tagEntryDropDown.optionArray = allTagsArray
+        
+        getAllUserTags()
+        
     }
 
     
@@ -38,17 +45,46 @@ class FormViewController: UIViewController {
                 }
             }
         }
-        print(entryText.text!)
     }
     
     
     @IBAction func addTagPressed(_ sender: UIButton) {
-        if let newTag = tagEntryField.text {
-            tags.append(newTag)
-            tagEntryField.text = ""
+        if let newTag = tagEntryDropDown.text {
+            if !tags.contains(newTag) {
+                tags.append(newTag)
+            }
+            tagEntryDropDown.text = ""
         }
         tagTableView.reloadData()
     }
+    
+    func getAllUserTags() {
+        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+            (querySnapshot, err) in
+            
+            self.allTagsArray = []
+            
+            if let e = err {
+                print("Error getting documents: \(e)")
+            } else {
+                if let snapshotDocuments = querySnapshot?.documents {
+                    for doc in snapshotDocuments {
+                        let data = doc.data()
+                        if let tags = data[K.FStore.tagsField] as? [String] {
+                            for tag in tags {
+                                if !self.allTagsArray.contains(tag) {
+                                    self.allTagsArray.append(tag)
+                                }
+                            }
+                        }
+                    }
+                }
+                self.tagEntryDropDown.optionArray = self.allTagsArray
+            }
+        }
+    }
+    
+    
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {
@@ -76,7 +112,8 @@ extension FormViewController: UITableViewDataSource {
 
 extension FormViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: this function is where I can tell it what to do when the user clicks on an entry listed in the table
-        print(indexPath.row)
+        // remove tag item when the user clicks on an entry listed in the table.
+        tags.remove(at: indexPath.row)
+        tagTableView.reloadData()
     }
 }
