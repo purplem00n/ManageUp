@@ -9,13 +9,15 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 import iOSDropDown
+import TTGTags
 
-class FormViewController: UIViewController {
+class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
 
 
     @IBOutlet weak var tagEntryDropDown: DropDown!
     @IBOutlet weak var entryText: UITextView!
     @IBOutlet weak var tagTableView: UITableView!
+    let ttgTagView = TTGTextTagCollectionView()
     
     let db = Firestore.firestore()
     var tags: [String] = []
@@ -25,8 +27,15 @@ class FormViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        super.viewDidLayoutSubviews()
         tagTableView.delegate = self
         tagTableView.dataSource = self
+        
+        ttgTagView.frame = CGRect(x: 20, y: 148, width: view.frame.size.width, height: 150)
+        ttgTagView.alignment = .left
+        ttgTagView.delegate = self
+        view.addSubview(ttgTagView)
+        
         
         tagEntryDropDown.optionArray = allTagsArray
         
@@ -50,6 +59,9 @@ class FormViewController: UIViewController {
     
     @IBAction func addTagPressed(_ sender: UIButton) {
         if let newTag = tagEntryDropDown.text {
+            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: TTGTextTagStyle())
+            ttgTagView.addTag(textTag)
+            ttgTagView.reload()
             if !tags.contains(newTag) {
                 tags.append(newTag)
             }
@@ -57,6 +69,16 @@ class FormViewController: UIViewController {
         }
         tagTableView.reloadData()
     }
+    
+    func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
+        print(tag!.content)
+        print(index)
+        tag.style.backgroundColor = UIColor.purple
+//        ttgTagView.removeTag(tag)
+        // remove from tags list as well
+    }
+    
+    
     
     func getAllUserTags() {
         db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
