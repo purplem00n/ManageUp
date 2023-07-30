@@ -17,7 +17,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
     
     let searchController = UISearchController()
     var entries: [Entry] = []
-    var allTags: [String: String] = [:]
+    var allTags: [String] = []
     
     
     override func viewDidLoad() {
@@ -31,8 +31,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         navigationItem.searchController = searchController
         
         loadEntries()
-        getAllTags()
-        //        queryForAllTags()
+//        getAllTags()
     }
     
     func loadEntries() {
@@ -47,7 +46,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
-                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String : String] {
+                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String] {
                             let newEntry = Entry(user: user, text: text, tags: tags)
                             self.entries.append(newEntry)
                             
@@ -61,40 +60,28 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         }
     }
     
-    func getAllTags() {
-        let snapshotDocuments = db.collection(K.FStore.collectionName)
-        snapshotDocuments.getDocuments { querySnapshot, error in
-            
-            self.allTags = [:]
-            
-            if let e = error {
-                print(e)
-            } else {
-                for document in querySnapshot!.documents {
-                    let entry = document.data()
-                    if let tags = entry["tags"] as? [String: String] {
-                        for (tag, color) in tags {
-                            if !self.allTags.contains(where: { $0.key == tag }) {
-                                self.allTags[tag] = color
-                            }
-                        }
-                    }
-                }
-            }
-            print(self.allTags)
-            //            THIS FUNC WORKS, but I should be using a query instead....
-        }
-    }
+//    func getAllTags() {
+//        let snapshotDocuments = db.collection(K.FStore.collectionName)
+//        snapshotDocuments.getDocuments { querySnapshot, error in
+//
+//            self.allTags = []
+//
+//            if let e = error {
+//                print(e)
+//            } else {
+//                for document in querySnapshot!.documents {
+//                    let entry = document.data()
+//                    if let tags = entry["tags"] as? [String] {
+//                        for tag in tags {
+//                            self.allTags.append(tag)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            print(self.allTags)
+//        }  //NOTE: not specific to user.
     
-    //    func queryForAllTags() {
-    //        let allTagsByQuery = db.collection(K.FStore.collectionName).whereField(K.FStore.tagsField, isNotEqualTo: [] as NSArray)
-    //        print(allTagsByQuery)
-    //returns a FIRQuery data object. Not sure how to parse this
-    
-    
-    //    func queryForUserEntries {
-    //
-    //    }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {

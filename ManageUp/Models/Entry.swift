@@ -11,5 +11,5 @@ import UIKit
 struct Entry {
     let user: String
     let text: String
-    let tags: [String: String] // tagName: tagColor
+    let tags: [String]
 }

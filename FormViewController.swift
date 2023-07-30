@@ -8,22 +8,29 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import iOSDropDown
 
 class FormViewController: UIViewController {
 
-    
+
+    @IBOutlet weak var tagEntryDropDown: DropDown!
     @IBOutlet weak var entryText: UITextView!
-    @IBOutlet weak var tagEntryField: UITextField!
     @IBOutlet weak var tagTableView: UITableView!
     
     let db = Firestore.firestore()
+    var tags: [String] = []
     
-    var tags: [String: String] = [:]
+    var allTagsArray: [String] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tagTableView.delegate = self
         tagTableView.dataSource = self
+        
+        tagEntryDropDown.optionArray = allTagsArray
+        
+        getAllUserTags()
         
     }
 
@@ -42,15 +49,42 @@ class FormViewController: UIViewController {
     
     
     @IBAction func addTagPressed(_ sender: UIButton) {
-        if let newTag = tagEntryField.text {
-            
-            // check if new tag is in existing tags, if so do nothing
-            // if not in existing tags:
-            tags[newTag] = "red" // will need to add color: based on a long list of colors, add the color at the following index, and increment the index for next time.
-            tagEntryField.text = ""
+        if let newTag = tagEntryDropDown.text {
+            if !tags.contains(newTag) {
+                tags.append(newTag)
+            }
+            tagEntryDropDown.text = ""
         }
         tagTableView.reloadData()
     }
+    
+    func getAllUserTags() {
+        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+            (querySnapshot, err) in
+            
+            self.allTagsArray = []
+            
+            if let e = err {
+                print("Error getting documents: \(e)")
+            } else {
+                if let snapshotDocuments = querySnapshot?.documents {
+                    for doc in snapshotDocuments {
+                        let data = doc.data()
+                        if let tags = data[K.FStore.tagsField] as? [String] {
+                            for tag in tags {
+                                if !self.allTagsArray.contains(tag) {
+                                    self.allTagsArray.append(tag)
+                                }
+                            }
+                        }
+                    }
+                }
+                self.tagEntryDropDown.optionArray = self.allTagsArray
+            }
+        }
+    }
+    
+    
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {
@@ -71,21 +105,15 @@ extension FormViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableTagCell")
-//        cell?.textLabel?.text = ??? // this needs to be the string that is the key in the dictionary, I don't know how to access that, the only way I have is by index
-        // this might not be a problem if I decide another method of adding tags.
-        //doesn't work:
-//        for (key, value) in tags {
-//            cell?.textLabel?.text = key
-//        }
-        // tags[indexPath.row] was what worked when tags was a list instead of dictionary
+        cell?.textLabel?.text = tags[indexPath.row]
         return cell!
     }
 }
 
 extension FormViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // remove tag item when the user clicks on an entry listed in the table. Not sure how to access the keyString.
-//        tags.removeValue(forKey: <#T##String#>)
+        // remove tag item when the user clicks on an entry listed in the table.
+        tags.remove(at: indexPath.row)
         tagTableView.reloadData()
     }
 }
