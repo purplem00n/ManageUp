@@ -16,7 +16,6 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
 
     @IBOutlet weak var tagEntryDropDown: DropDown!
     @IBOutlet weak var entryText: UITextView!
-    @IBOutlet weak var tagTableView: UITableView!
     let ttgTagView = TTGTextTagCollectionView()
     
     let db = Firestore.firestore()
@@ -28,14 +27,11 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         super.viewDidLayoutSubviews()
-        tagTableView.delegate = self
-        tagTableView.dataSource = self
         
         ttgTagView.frame = CGRect(x: 20, y: 148, width: view.frame.size.width, height: 150)
         ttgTagView.alignment = .left
         ttgTagView.delegate = self
         view.addSubview(ttgTagView)
-        
         
         tagEntryDropDown.optionArray = allTagsArray
         
@@ -67,7 +63,6 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
             }
             tagEntryDropDown.text = ""
         }
-        tagTableView.reloadData()
     }
     
     func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
@@ -76,7 +71,6 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         ttgTagView.reload()
         // remove from tags list as well
         tags.remove(at: Int(index))
-        print(tags)
     }
     
     
@@ -118,25 +112,4 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         }
     }
 
-}
-
-//populates table view
-extension FormViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tags.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableTagCell")
-        cell?.textLabel?.text = tags[indexPath.row]
-        return cell!
-    }
-}
-
-extension FormViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // remove tag item when the user clicks on an entry listed in the table.
-        tags.remove(at: indexPath.row)
-        tagTableView.reloadData()
-    }
 }
