@@ -71,11 +71,12 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     }
     
     func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
-        print(tag!.content)
-        print(index)
-        tag.style.backgroundColor = UIColor.purple
-//        ttgTagView.removeTag(tag)
+        // remove tags on tap
+        ttgTagView.removeTag(tag)
+        ttgTagView.reload()
         // remove from tags list as well
+        tags.remove(at: Int(index))
+        print(tags)
     }
     
     
