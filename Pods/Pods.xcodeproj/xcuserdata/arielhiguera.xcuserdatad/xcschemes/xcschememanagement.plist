@@ -60,19 +60,26 @@
 			<key>orderHint</key>
 			<integer>7</integer>
 		</dict>
+		<key>IQKeyboardManagerSwift.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>13</integer>
+		</dict>
 		<key>Pods-ManageUp.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>14</integer>
+			<integer>16</integer>
 		</dict>
 		<key>PromisesObjC.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>15</integer>
+			<integer>17</integer>
 		</dict>
 		<key>abseil.xcscheme</key>
 		<dict>
@@ -102,19 +109,26 @@
 			<key>orderHint</key>
 			<integer>10</integer>
 		</dict>
-		<key>leveldb-library.xcscheme</key>
+		<key>iOSDropDown.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>12</integer>
 		</dict>
+		<key>leveldb-library.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>14</integer>
+		</dict>
 		<key>nanopb.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>13</integer>
+			<integer>15</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>

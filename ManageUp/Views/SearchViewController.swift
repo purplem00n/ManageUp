@@ -9,36 +9,37 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class SearchViewController: UIViewController {
+class SearchViewController: UIViewController, UISearchResultsUpdating {
     
     let db = Firestore.firestore()
-
+    
     @IBOutlet weak var tableView: UITableView!
     
+    let searchController = UISearchController()
     var entries: [Entry] = []
-//    [
-//        Entry(user:"1@2.com", date: Date.now, text: "This is a test entry", tags:["success", "capstone"]),
-//        Entry(user:"1@2.com", date: Date.now, text: "Add entries to table view", tags: ["success", "organization"]),
-//        Entry(user: "1@2.com", date: Date.now, text: "Complete another story!", tags: ["accomplishment"])
-//    ]
+    var allTags: [String] = []
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.delegate = self
         tableView.dataSource = self
         
-        loadEntries()
+        title = "Search"
+        searchController.searchResultsUpdater = self
+        navigationItem.searchController = searchController
         
+        loadEntries()
+//        getAllTags()
     }
     
     func loadEntries() {
-
-        db.collection(K.FStore.collectionName).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
-
+            
             self.entries = []
-
+            
             if let e = err {
                 print("Error getting documents: \(e)")
             } else {
@@ -48,7 +49,7 @@ class SearchViewController: UIViewController {
                         if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String] {
                             let newEntry = Entry(user: user, text: text, tags: tags)
                             self.entries.append(newEntry)
-
+                            
                             DispatchQueue.main.async {
                                 self.tableView.reloadData()
                             } // this makes sure the table updates with the most current data.
@@ -59,15 +60,46 @@ class SearchViewController: UIViewController {
         }
     }
     
+//    func getAllTags() {
+//        let snapshotDocuments = db.collection(K.FStore.collectionName)
+//        snapshotDocuments.getDocuments { querySnapshot, error in
+//
+//            self.allTags = []
+//
+//            if let e = error {
+//                print(e)
+//            } else {
+//                for document in querySnapshot!.documents {
+//                    let entry = document.data()
+//                    if let tags = entry["tags"] as? [String] {
+//                        for tag in tags {
+//                            self.allTags.append(tag)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            print(self.allTags)
+//        }  //NOTE: not specific to user.
+    
+    
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {
-        try Auth.auth().signOut()
+            try Auth.auth().signOut()
             navigationController?.popToRootViewController(animated: true)
         } catch let signOutError as NSError {
-          print("Error signing out: %@", signOutError)
+            print("Error signing out: %@", signOutError)
         }
     }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text else {
+            return
+        }
+        print(text)
+    }
 }
+
 
 //populates table view
 extension SearchViewController: UITableViewDataSource {
@@ -78,7 +110,6 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell")
         cell?.textLabel?.text = entries[indexPath.row].text
-//        cell?.textLabel?.text = K.FStore.collectionName[indexPath.row].data.textField
         return cell!
     }
     
