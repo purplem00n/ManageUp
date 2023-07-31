@@ -9,14 +9,15 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class SearchViewController: UIViewController, UISearchResultsUpdating {
+class SearchViewController: UIViewController, UISearchBarDelegate {
     
     let db = Firestore.firestore()
     
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
-    let searchController = UISearchController()
     var entries: [Entry] = []
+    var filteredEntries: [Entry] = []
     var allTags: [String] = []
     
     
@@ -26,9 +27,9 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         tableView.delegate = self
         tableView.dataSource = self
         
-        title = "Search"
-        searchController.searchResultsUpdater = self
-        navigationItem.searchController = searchController
+//        navigationItem.searchController = searchController
+//        searchController.searchResultsUpdater = self
+
         
         loadEntries()
 //        getAllTags()
@@ -46,21 +47,34 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
-                        print(data[K.FStore.dateField])
-                        print(type(of: K.FStore.dateField))
-                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String] {
-                            let newEntry = Entry(user: user, text: text, tags: tags)
+                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] {
+                            let newEntry = Entry(user: user, text: text, tags: tags, date: date)
                             self.entries.append(newEntry)
-                            
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                            } // this makes sure the table updates with the most current data.
                         }
                     }
+                    self.filteredEntries = self.entries
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    } // this makes sure the table updates with the most current data.
                 }
             }
         }
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredEntries = []
+        if searchText == "" {
+            filteredEntries = entries
+        }
+        // need to modify this search to be case insensitive.
+        for entry in entries {
+            if entry.text.uppercased().contains(searchText.uppercased()) || entry.tags.contains(searchText) {
+                filteredEntries.append(entry)
+            }
+        }
+        tableView.reloadData()
+    }
+    
     
 //    func getAllTags() {
 //        let snapshotDocuments = db.collection(K.FStore.collectionName)
@@ -94,26 +108,20 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
         }
     }
     
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text else {
-            return
-        }
-        print(text)
-    }
 }
 
 
 //populates table view
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return entries.count
+        return filteredEntries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell")
-        cell?.textLabel?.text = entries[indexPath.row].text
-//        cell?.detailTextLabel?.text = entries[indexPath.row].date
-        print(entries[indexPath.row])
+//        cell?.textLabel?.text = entries[indexPath.row].text
+//        cell?.detailTextLabel?.text = entries[indexPath.row].date DOESN'T WORK: need to get subtitle to be the date -- convert date to string type somehow
+        cell?.textLabel?.text = filteredEntries[indexPath.row].text
         return cell!
     }
     
@@ -126,3 +134,5 @@ extension SearchViewController: UITableViewDelegate {
         print(indexPath.row)
     }
 }
+
+

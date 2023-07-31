@@ -184,6 +184,14 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aNw-cx-9JI">
+                                <rect key="frame" x="0.0" y="103" width="393" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="NKs-7t-zbA" id="8xP-fv-muH"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ehO-8y-lDI"/>
                         <color key="backgroundColor" red="0.7725490196" green="0.87450980389999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
@@ -201,6 +209,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="searchBar" destination="aNw-cx-9JI" id="sI6-rb-TRQ"/>
                         <outlet property="tableView" destination="KYk-Qs-gPD" id="NPb-CM-qG9"/>
                     </connections>
                 </viewController>
