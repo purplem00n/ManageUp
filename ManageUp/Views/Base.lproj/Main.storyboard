@@ -396,6 +396,10 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="G13-m6-242">
+                                <rect key="frame" x="0.0" y="328" width="393" height="40"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </datePicker>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="36v-8R-KpN"/>
                         <color key="backgroundColor" red="0.77254901960784317" green="0.87450980392156863" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
@@ -419,6 +423,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="date" destination="G13-m6-242" id="aie-0Z-pr8"/>
                         <outlet property="entryText" destination="aOt-5W-dz4" id="H87-Id-pRq"/>
                         <outlet property="tagEntryDropDown" destination="Nbg-6o-FGF" id="sTx-FJ-PfQ"/>
                     </connections>
