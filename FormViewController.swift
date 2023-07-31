@@ -70,7 +70,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         // remove tags on tap
         ttgTagView.removeTag(tag)
         ttgTagView.reload()
-        // remove from tags list as well
+        // remove from tags list
         tags.remove(at: Int(index))
     }
     

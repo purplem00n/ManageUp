@@ -19,6 +19,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     var entries: [Entry] = []
     var filteredEntries: [Entry] = []
     var allTags: [String] = []
+    let df = DateFormatter()
     
     
     override func viewDidLoad() {
@@ -47,8 +48,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
-                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] {
-                            let newEntry = Entry(user: user, text: text, tags: tags, date: date)
+                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String] {
+                            let newEntry = Entry(user: user, text: text, tags: tags)
                             self.entries.append(newEntry)
                         }
                     }
@@ -66,38 +67,18 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         if searchText == "" {
             filteredEntries = entries
         }
-        // need to modify this search to be case insensitive.
         for entry in entries {
-            if entry.text.uppercased().contains(searchText.uppercased()) || entry.tags.contains(searchText) {
+            for tag in entry.tags {
+                if tag.uppercased().contains(searchText.uppercased()) {
+                    filteredEntries.append(entry)
+                }
+            }
+            if entry.text.uppercased().contains(searchText.uppercased()) {
                 filteredEntries.append(entry)
             }
         }
         tableView.reloadData()
     }
-    
-    
-//    func getAllTags() {
-//        let snapshotDocuments = db.collection(K.FStore.collectionName)
-//        snapshotDocuments.getDocuments { querySnapshot, error in
-//
-//            self.allTags = []
-//
-//            if let e = error {
-//                print(e)
-//            } else {
-//                for document in querySnapshot!.documents {
-//                    let entry = document.data()
-//                    if let tags = entry["tags"] as? [String] {
-//                        for tag in tags {
-//                            self.allTags.append(tag)
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            print(self.allTags)
-//        }  //NOTE: not specific to user.
-    
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {
@@ -119,8 +100,8 @@ extension SearchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell")
-//        cell?.textLabel?.text = entries[indexPath.row].text
-//        cell?.detailTextLabel?.text = entries[indexPath.row].date DOESN'T WORK: need to get subtitle to be the date -- convert date to string type somehow
+        cell?.detailTextLabel?.text = "DATE"  // entries[indexPath.row].date
+//        DOESN'T WORK: need to get subtitle to be the date -- convert date to string type somehow
         cell?.textLabel?.text = filteredEntries[indexPath.row].text
         return cell!
     }

@@ -12,5 +12,4 @@ struct Entry {
     let user: String
     let text: String
     let tags: [String]
-    let date: Any
 }
