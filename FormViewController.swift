@@ -14,6 +14,7 @@ import TTGTags
 class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
 
 
+    @IBOutlet weak var date: UIDatePicker!
     @IBOutlet weak var tagEntryDropDown: DropDown!
     @IBOutlet weak var entryText: UITextView!
     let ttgTagView = TTGTextTagCollectionView()
@@ -42,7 +43,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     
     @IBAction func submitPressed(_ sender: UIButton) {
         if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
-            db.collection(K.FStore.collectionName).addDocument(data: [K.FStore.textField: textBody, K.FStore.dateField: Date.now, K.FStore.userField: user, K.FStore.tagsField: tags]) { (error) in
+            db.collection(K.FStore.collectionName).addDocument(data: [K.FStore.textField: textBody, K.FStore.dateField: date.date, K.FStore.userField: user, K.FStore.tagsField: tags]) { (error) in
                 if let e = error {
                     print(e)
                 } else {
