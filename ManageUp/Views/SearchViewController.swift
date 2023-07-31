@@ -46,6 +46,8 @@ class SearchViewController: UIViewController, UISearchResultsUpdating {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
+                        print(data[K.FStore.dateField])
+                        print(type(of: K.FStore.dateField))
                         if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String] {
                             let newEntry = Entry(user: user, text: text, tags: tags)
                             self.entries.append(newEntry)
@@ -110,6 +112,8 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell")
         cell?.textLabel?.text = entries[indexPath.row].text
+//        cell?.detailTextLabel?.text = entries[indexPath.row].date
+        print(entries[indexPath.row])
         return cell!
     }
     
