@@ -10,6 +10,7 @@ pod 'FirebaseAuth'
 pod 'FirebaseFirestore'
 pod 'IQKeyboardManagerSwift'
 pod 'iOSDropDown'
+pod 'TTGTagCollectionView'
 
 
 
