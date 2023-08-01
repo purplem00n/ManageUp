@@ -55,7 +55,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     
     
     @IBAction func addTagPressed(_ sender: UIButton) {
-        if let newTag = tagEntryDropDown.text {
+        if let newTag = tagEntryDropDown.text, tagEntryDropDown.text != "" {
             let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: TTGTextTagStyle())
             ttgTagView.addTag(textTag)
             ttgTagView.reload()
@@ -63,6 +63,8 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                 tags.append(newTag)
             }
             tagEntryDropDown.text = ""
+        } else {
+            print(tagEntryDropDown.text)
         }
     }
     
@@ -102,7 +104,12 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         }
     }
     
-    
+    //not in use right now
+    func formatDate(date: Date) -> String {
+        let df = DateFormatter()
+        df.dateFormat = "MMMM dd yyyy"
+        return df.string(from:date)
+    }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {

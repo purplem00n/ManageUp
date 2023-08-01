@@ -15,6 +15,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var fromDate: UIDatePicker!
+    @IBOutlet weak var toDate: UIDatePicker!
     
     var entries: [Entry] = []
     var filteredEntries: [Entry] = []
@@ -28,12 +30,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         tableView.delegate = self
         tableView.dataSource = self
         
-//        navigationItem.searchController = searchController
-//        searchController.searchResultsUpdater = self
-
-        
         loadEntries()
-//        getAllTags()
     }
     
     func loadEntries() {
@@ -48,6 +45,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
+//                        , let date = data[K.FStore.dateField] as? Timestamp - apparently it's a timestamp type.
                         if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String] {
                             let newEntry = Entry(user: user, text: text, tags: tags)
                             self.entries.append(newEntry)
@@ -61,24 +59,51 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             }
         }
     }
+    // THIS WORKS
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        filteredEntries = []
+//        if searchText == "" {
+//            filteredEntries = entries
+//        }
+//        for entry in entries {
+//            for tag in entry.tags {
+//                if tag.uppercased().contains(searchText.uppercased()) {
+//                    filteredEntries.append(entry)
+//                }
+//            }
+//            if entry.text.uppercased().contains(searchText.uppercased()) {
+//                filteredEntries.append(entry)
+//            }
+//        }
+//        tableView.reloadData()
+//    }
     
+    //TESTING - does not work with "unsupported type UIDatePicker" as error
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredEntries = []
-        if searchText == "" {
-            filteredEntries = entries
-        }
-        for entry in entries {
-            for tag in entry.tags {
-                if tag.uppercased().contains(searchText.uppercased()) {
-                    filteredEntries.append(entry)
+        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDate!).whereField(K.FStore.dateField, isLessThan: toDate!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+            (querySnapshot, err) in
+
+            self.filteredEntries = []
+
+            if let e = err {
+                print("Error getting documents: \(e)")
+            } else {
+                if let snapshotDocuments = querySnapshot?.documents {
+                    for doc in snapshotDocuments {
+                        let data = doc.data()
+                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String] {
+                            let newEntry = Entry(user: user, text: text, tags: tags)
+                            self.filteredEntries.append(newEntry)
+                        }
+                    }
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    } // this makes sure the table updates with the most current data.
                 }
             }
-            if entry.text.uppercased().contains(searchText.uppercased()) {
-                filteredEntries.append(entry)
-            }
         }
-        tableView.reloadData()
     }
+
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {
