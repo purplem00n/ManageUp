@@ -36,6 +36,8 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         
         tagEntryDropDown.optionArray = allTagsArray
         
+        date.timeZone = TimeZone.current
+        
         getAllUserTags()
         
     }
@@ -104,7 +106,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         }
     }
     
-    //not in use right now
+    //not in use right now in this file
     func formatDate(date: Date) -> String {
         let df = DateFormatter()
         df.dateFormat = "MMMM dd yyyy"

@@ -29,6 +29,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         tableView.delegate = self
         tableView.dataSource = self
         
+        // sets timezone to the time zone of the device
+        fromDate.timeZone = TimeZone.current
+        toDate.timeZone = TimeZone.current
+        
         loadEntries()
     }
     
@@ -44,11 +48,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
-//                        if let date = data[K.FStore.dateField] as? Timestamp {
-////                            print(date)
-////                            print(date.dateValue())
-//                            let date = date.dateValue()
-//                        } // - apparently it's a timestamp type.
                         if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
                             let date = date.dateValue()
                             let newEntry = Entry(user: user, text: text, tags: tags, date: date)
@@ -65,17 +64,21 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
     // THIS WORKS to search text and tag field
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let calendar = Calendar.current
+        let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: fromDate.date)!
+        let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: toDate.date)!
         filteredEntries = []
         if searchText == "" {
             filteredEntries = entries
         }
         for entry in entries {
             for tag in entry.tags {
-                if tag.uppercased().contains(searchText.uppercased()) && entry.date <= toDate.date && entry.date >= fromDate.date {
+                if tag.uppercased().contains(searchText.uppercased()) && entry.date <= toDateReset && entry.date >= fromDateReset {
                     filteredEntries.append(entry)
+                    print(entry.date, fromDateReset, toDateReset)
                 }
             }
-            if entry.text.uppercased().contains(searchText.uppercased()) && entry.date <= toDate.date && entry.date >= fromDate.date {
+            if entry.text.uppercased().contains(searchText.uppercased()) && entry.date <= toDateReset && entry.date >= fromDateReset {
                 filteredEntries.append(entry)
             }
         }
