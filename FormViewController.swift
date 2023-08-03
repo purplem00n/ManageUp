@@ -66,6 +66,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                     if let e = error {
                         print(e)
                     } else {
+                        self.performSegue(withIdentifier: K.submitSegue, sender: self)
                         print("Successfully saved data.")
                     }
                 }
@@ -76,6 +77,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                     if let e = error {
                         print(e)
                     } else {
+                        self.performSegue(withIdentifier: K.submitSegue, sender: self)
                         print("Successfully saved data.")
                     }
                 }

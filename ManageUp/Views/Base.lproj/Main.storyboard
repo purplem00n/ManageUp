@@ -148,7 +148,7 @@
             <objects>
                 <viewController title="Search View Controller" id="NKs-7t-zbA" customClass="SearchViewController" customModule="ManageUp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="faA-Wh-Qvk">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="KYk-Qs-gPD">
@@ -275,7 +275,7 @@
             <objects>
                 <viewController id="VwO-lf-DUc" customClass="EntryViewController" customModule="ManageUp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gMi-ag-c7o">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ev9-kQ-nOn">
@@ -393,11 +393,11 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="HomeViewController" customModule="ManageUp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="0kd-Fk-svh">
-                                <rect key="frame" x="121.66666666666669" y="599" width="150" height="120"/>
+                                <rect key="frame" x="121.66666666666669" y="623" width="150" height="120"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="616-Oj-lPH">
                                         <rect key="frame" x="0.0" y="0.0" width="150" height="50"/>
@@ -464,14 +464,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tags" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fQN-GE-tky">
-                                <rect key="frame" x="20" y="113" width="36" height="21"/>
+                                <rect key="frame" x="20" y="10" width="36" height="21"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.2901960784" green="0.33333333329999998" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Jm-Kr-1X8">
-                                <rect key="frame" x="338" y="113" width="35" height="35"/>
+                                <rect key="frame" x="338" y="10" width="35" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="+">
                                     <color key="baseForegroundColor" red="0.2901960784" green="0.33333333329999998" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -482,7 +482,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="aOt-5W-dz4">
-                                <rect key="frame" x="20" y="419" width="353" height="200"/>
+                                <rect key="frame" x="20" y="443" width="353" height="200"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="N4i-tQ-HPM"/>
@@ -493,7 +493,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" enablesReturnKeyAutomatically="YES"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="08J-Sh-Gfm">
-                                <rect key="frame" x="121.66666666666669" y="669" width="150" height="50"/>
+                                <rect key="frame" x="121.66666666666669" y="693" width="150" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="150" id="5x1-Cm-rqg"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="gZh-Sn-zKV"/>
@@ -543,6 +543,7 @@
                         <outlet property="date" destination="G13-m6-242" id="aie-0Z-pr8"/>
                         <outlet property="entryText" destination="aOt-5W-dz4" id="H87-Id-pRq"/>
                         <outlet property="tagEntryDropDown" destination="Nbg-6o-FGF" id="sTx-FJ-PfQ"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="FormToHome" id="hb0-H3-mZL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1kV-gr-ESW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -569,8 +570,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="YRQ-7s-bgN"/>
-        <segue reference="aKY-Py-u6n"/>
+        <segue reference="qgk-tc-HRv"/>
+        <segue reference="hb0-H3-mZL"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.up" catalog="system" width="118" height="128"/>
