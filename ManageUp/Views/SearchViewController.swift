@@ -332,7 +332,7 @@ extension SearchViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell")
         let dateString = formatDate(date: filteredEntries[indexPath.row].date)
         cell?.detailTextLabel?.text = dateString
-        cell?.textLabel?.text = filteredEntries[indexPath.row].text
+        cell?.textLabel?.text = String(filteredEntries[indexPath.row].text.prefix(33))
         return cell!
     }
     
@@ -342,8 +342,6 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // this function is the action upon tapping on a table row
-        print(indexPath.row)
-        print(filteredEntries.count)
         selectedEntry = filteredEntries[indexPath.row]
         performSegue(withIdentifier: K.entrySegue, sender: self)
     }
