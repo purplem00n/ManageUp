@@ -8,8 +8,10 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import iOSDropDown
+import TTGTags
 
-class SearchViewController: UIViewController, UISearchBarDelegate {
+class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCollectionViewDelegate {
     
     let db = Firestore.firestore()
     
@@ -17,10 +19,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var fromDate: UIDatePicker!
     @IBOutlet weak var toDate: UIDatePicker!
+    @IBOutlet weak var tagSelector: DropDown!
+    let ttgTagView = TTGTextTagCollectionView()
     
     var entries: [Entry] = []
     var filteredEntries: [Entry] = []
     var allTags: [String] = []
+    var selectedTags: [String] = []
     var selectedEntry: Entry = Entry(user: "", id: "", text: "", tags: [], date: Date.now)
     
     
@@ -34,7 +39,16 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         fromDate.timeZone = TimeZone.current
         toDate.timeZone = TimeZone.current
         
+        // initialize tag view
+        ttgTagView.frame = CGRect(x: 120, y: 148, width: view.frame.size.width, height: 80)
+        ttgTagView.alignment = .left
+        ttgTagView.delegate = self
+        view.addSubview(ttgTagView)
+        
+        tagSelector.optionArray = allTags
+        
         loadEntries()
+        getAllUserTags()
     }
     
     func loadEntries() {
@@ -49,8 +63,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
-                        print(doc.documentID)
-                        print(type(of: doc.documentID))
                         if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp, let id = doc.documentID as? String {
                             let date = date.dateValue()
                             let newEntry = Entry(user: user, id: id, text: text, tags: tags, date: date)
@@ -67,13 +79,16 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     }
     // THIS WORKS to search text and tag field with date range
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         let calendar = Calendar.current
         let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: fromDate.date)!
         let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: toDate.date)!
+        
         filteredEntries = []
         if searchText == "" {
             filteredEntries = entries
         }
+        
         for entry in entries {
             for tag in entry.tags {
                 if tag.uppercased().contains(searchText.uppercased()) && entry.date <= toDateReset && entry.date >= fromDateReset {
@@ -85,6 +100,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 filteredEntries.append(entry)
             }
         }
+        
         tableView.reloadData()
     }
     
@@ -115,7 +131,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
 //        }
 //    }
     
-    // add a prepare for segue function that will let the segue send selected vars data to the next screen
+    // let the segue send selected vars data to the next screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == K.entrySegue {
             if let entryViewController = segue.destination as? EntryViewController {
@@ -125,6 +141,39 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         }
     }
 
+    func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
+        // remove tags on tap
+        ttgTagView.removeTag(tag)
+        ttgTagView.reload()
+        // remove from tags list
+        selectedTags.remove(at: Int(index))
+    }
+    
+    func getAllUserTags() {
+        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+            (querySnapshot, err) in
+            
+            self.allTags = []
+            
+            if let e = err {
+                print("Error getting documents: \(e)")
+            } else {
+                if let snapshotDocuments = querySnapshot?.documents {
+                    for doc in snapshotDocuments {
+                        let data = doc.data()
+                        if let tags = data[K.FStore.tagsField] as? [String] {
+                            for tag in tags {
+                                if !self.allTags.contains(tag) {
+                                    self.allTags.append(tag)
+                                }
+                            }
+                        }
+                    }
+                }
+                self.tagSelector.optionArray = self.allTags
+            }
+        }
+    }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         do {

@@ -21,7 +21,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     
     let db = Firestore.firestore()
     
-    //accept values from EntryViews here
+    //accept values from EntryViews here for editing
     var entryValue: Entry = Entry(user: (Auth.auth().currentUser?.email)!, id: "", text: "", tags: [], date: Date.now)
     var tags: [String] = []
     var dateValue: Date = Date.now
@@ -58,7 +58,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         
     }
 
-    
+    // can probably clean this up
     @IBAction func submitPressed(_ sender: UIButton) {
         if entryValue.id == "" {
             if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
@@ -83,7 +83,6 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         }
     }
     
-    
     @IBAction func addTagPressed(_ sender: UIButton) {
         if let newTag = tagEntryDropDown.text, tagEntryDropDown.text != "" {
             let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: TTGTextTagStyle())
@@ -103,9 +102,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         // remove from tags list
         tags.remove(at: Int(index))
     }
-    
-    
-    
+
     func getAllUserTags() {
         db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
