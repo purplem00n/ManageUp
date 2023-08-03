@@ -9,7 +9,7 @@ import UIKit
 
 class EntryViewController: UIViewController {
     
-    var entry: Entry = Entry(user: "", text: "", tags: [], date: Date.now)
+    var entry: Entry = Entry(user: "", id: "", text: "", tags: [], date: Date.now)
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var tagsLabel: UILabel!
@@ -20,12 +20,26 @@ class EntryViewController: UIViewController {
         
         textDisplay.text = entry.text
         
-        var dateString = formatDate(date: entry.date)
+        let dateString = formatDate(date: entry.date)
         dateLabel.text = dateString
         
         tagsLabel.text! = entry.tags.joined(separator: ", ")
         
     }
+    
+    @IBAction func editButtonPressed(_ sender: Any) {
+        // take back to form controller, passing Entry data
+        performSegue(withIdentifier: K.editSegue, sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == K.editSegue {
+            if let entryViewController = segue.destination as? FormViewController {
+                entryViewController.entryValue = entry
+            }
+        }
+    }
+    
     
     func formatDate(date: Date) -> String {
         let df = DateFormatter()

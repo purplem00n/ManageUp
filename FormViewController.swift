@@ -20,7 +20,12 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     let ttgTagView = TTGTextTagCollectionView()
     
     let db = Firestore.firestore()
+    
+    //accept values from EntryViews here
+    var entryValue: Entry = Entry(user: (Auth.auth().currentUser?.email)!, id: "", text: "", tags: [], date: Date.now)
     var tags: [String] = []
+    var dateValue: Date = Date.now
+    var textValue: String = ""
     
     var allTagsArray: [String] = []
     
@@ -29,13 +34,23 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         super.viewDidLoad()
         super.viewDidLayoutSubviews()
         
+        // assign initial values to the UI: if empty, or if editing existing values
+        tags = entryValue.tags
+        date.date = entryValue.date
+        entryText.text = entryValue.text
+        
         ttgTagView.frame = CGRect(x: 20, y: 148, width: view.frame.size.width, height: 150)
         ttgTagView.alignment = .left
         ttgTagView.delegate = self
         view.addSubview(ttgTagView)
         
+        for tag in tags {
+            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: tag), style: TTGTextTagStyle())
+            ttgTagView.addTag(textTag)
+        }
+        ttgTagView.reload()
+        
         tagEntryDropDown.optionArray = allTagsArray
-//        let config = TTGTextTagConfig()
         
         date.timeZone = TimeZone.current
         
@@ -45,12 +60,24 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
 
     
     @IBAction func submitPressed(_ sender: UIButton) {
-        if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
-            db.collection(K.FStore.collectionName).addDocument(data: [K.FStore.textField: textBody, K.FStore.dateField: date.date, K.FStore.userField: user, K.FStore.tagsField: tags]) { (error) in
-                if let e = error {
-                    print(e)
-                } else {
-                    print("Successfully saved data.")
+        if entryValue.id == "" {
+            if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
+                db.collection(K.FStore.collectionName).document().setData([K.FStore.textField: textBody, K.FStore.dateField: date.date, K.FStore.userField: user, K.FStore.tagsField: tags]) { (error) in
+                    if let e = error {
+                        print(e)
+                    } else {
+                        print("Successfully saved data.")
+                    }
+                }
+            }
+        } else {
+            if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
+                db.collection(K.FStore.collectionName).document(entryValue.id).setData([K.FStore.textField: textBody, K.FStore.dateField: date.date, K.FStore.userField: user, K.FStore.tagsField: tags]) { (error) in
+                    if let e = error {
+                        print(e)
+                    } else {
+                        print("Successfully saved data.")
+                    }
                 }
             }
         }

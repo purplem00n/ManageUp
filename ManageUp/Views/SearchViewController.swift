@@ -21,7 +21,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     var entries: [Entry] = []
     var filteredEntries: [Entry] = []
     var allTags: [String] = []
-    var selectedEntry: Entry = Entry(user: "", text: "", tags: [], date: Date.now)
+    var selectedEntry: Entry = Entry(user: "", id: "", text: "", tags: [], date: Date.now)
     
     
     override func viewDidLoad() {
@@ -49,9 +49,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
-                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
+                        print(doc.documentID)
+                        print(type(of: doc.documentID))
+                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp, let id = doc.documentID as? String {
                             let date = date.dateValue()
-                            let newEntry = Entry(user: user, text: text, tags: tags, date: date)
+                            let newEntry = Entry(user: user, id: id, text: text, tags: tags, date: date)
                             self.entries.append(newEntry)
                         }
                     }
@@ -118,6 +120,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
         if segue.identifier == K.entrySegue {
             if let entryViewController = segue.destination as? EntryViewController {
                 entryViewController.entry = selectedEntry
+                // pass doc id?
             }
         }
     }
@@ -160,11 +163,9 @@ extension SearchViewController: UITableViewDataSource {
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: this function is where I can tell it what to do when the user clicks on an entry listed in the table
-        // populate selected entry variables with the data from this selected entry
+        // this function is the action upon tapping on a table row
         selectedEntry = filteredEntries[indexPath.row]
         performSegue(withIdentifier: K.entrySegue, sender: self)
-        print(indexPath.row, selectedEntry)
     }
 }
 
