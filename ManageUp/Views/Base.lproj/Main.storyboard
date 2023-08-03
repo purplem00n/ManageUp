@@ -220,6 +220,15 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XMP-AB-0MT">
+                                <rect key="frame" x="338" y="224" width="35" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="+"/>
+                                <connections>
+                                    <action selector="addTagPressed:" destination="NKs-7t-zbA" eventType="touchUpInside" id="odE-E5-z9N"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ehO-8y-lDI"/>
                         <color key="backgroundColor" red="0.7725490196" green="0.87450980389999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>

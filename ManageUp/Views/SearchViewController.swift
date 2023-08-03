@@ -136,7 +136,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
         if segue.identifier == K.entrySegue {
             if let entryViewController = segue.destination as? EntryViewController {
                 entryViewController.entry = selectedEntry
-                // pass doc id?
             }
         }
     }
@@ -148,6 +147,24 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
         // remove from tags list
         selectedTags.remove(at: Int(index))
     }
+    
+    @IBAction func addTagPressed(_ sender: UIButton) {
+        if let newTag = tagSelector.text, tagSelector.text != "" {
+            if allTags.contains(newTag) {
+                let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: TTGTextTagStyle())
+                ttgTagView.addTag(textTag)
+                ttgTagView.reload()
+                if !selectedTags.contains(newTag) {
+                    selectedTags.append(newTag)
+                }
+                tagSelector.text = ""
+            } else {
+                // pop up error message?
+                print("Must choose an existing tag")
+            }
+        }
+    }
+    
     
     func getAllUserTags() {
         db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
