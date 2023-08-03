@@ -235,7 +235,7 @@
                         <outlet property="searchBar" destination="aNw-cx-9JI" id="sI6-rb-TRQ"/>
                         <outlet property="tableView" destination="KYk-Qs-gPD" id="NPb-CM-qG9"/>
                         <outlet property="toDate" destination="hUP-lj-XU3" id="3uN-FK-NSt"/>
-                        <segue destination="VwO-lf-DUc" kind="show" identifier="searchToEntry" id="vnA-fJ-B0H"/>
+                        <segue destination="VwO-lf-DUc" kind="show" identifier="SearchToEntry" id="vnA-fJ-B0H"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1N6-mJ-dTL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -249,14 +249,43 @@
                     <view key="view" contentMode="scaleToFill" id="gMi-ag-c7o">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ev9-kQ-nOn">
+                                <rect key="frame" x="53" y="273" width="300" height="238"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Tags" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZCQ-fw-40b">
+                                <rect key="frame" x="53" y="577" width="278" height="43"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t7N-kj-kz4">
+                                <rect key="frame" x="53" y="166" width="278" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="pA6-0D-gqH"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.7725490196" green="0.87450980389999999" blue="0.97254901959999995" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="VSA-el-SG9"/>
+                    <connections>
+                        <outlet property="dateLabel" destination="t7N-kj-kz4" id="dlO-Vo-s7i"/>
+                        <outlet property="tagsLabel" destination="ZCQ-fw-40b" id="t2V-G8-0Ez"/>
+                        <outlet property="textDisplay" destination="Ev9-kQ-nOn" id="QEc-AB-VrT"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zME-FX-EMj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4383" y="-264"/>
+            <point key="canvasLocation" x="4382.4427480916029" y="-264.08450704225356"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="E8b-gu-CBM">

@@ -23,8 +23,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     var allTags: [String] = []
     var selectedEntry: Entry = Entry(user: "", text: "", tags: [], date: Date.now)
     
-    // create variables for selected entry
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
