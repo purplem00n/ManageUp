@@ -21,6 +21,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     var entries: [Entry] = []
     var filteredEntries: [Entry] = []
     var allTags: [String] = []
+    var selectedEntry: Entry = Entry(user: "", text: "", tags: [], date: Date.now)
+    
+    // create variables for selected entry
     
     
     override func viewDidLoad() {
@@ -62,7 +65,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
             }
         }
     }
-    // THIS WORKS to search text and tag field
+    // THIS WORKS to search text and tag field with date range
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         let calendar = Calendar.current
         let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: fromDate.date)!
@@ -111,6 +114,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
 //            }
 //        }
 //    }
+    
+    // add a prepare for segue function that will let the segue send selected vars data to the next screen
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == K.entrySegue {
+            if let entryViewController = segue.destination as? EntryViewController {
+                entryViewController.entry = selectedEntry
+            }
+        }
+    }
 
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
@@ -124,7 +136,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate {
     
     func formatDate(date: Date) -> String {
         let df = DateFormatter()
-        df.dateFormat = "MMMM dd yyyy"
+        df.dateFormat = "MMMM dd"
         return df.string(from:date)
     }
     
@@ -151,7 +163,10 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO: this function is where I can tell it what to do when the user clicks on an entry listed in the table
-        print(indexPath.row)
+        // populate selected entry variables with the data from this selected entry
+        selectedEntry = filteredEntries[indexPath.row]
+        performSegue(withIdentifier: K.entrySegue, sender: self)
+        print(indexPath.row, selectedEntry)
     }
 }
 

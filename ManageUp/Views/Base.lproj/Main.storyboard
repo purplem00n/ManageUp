@@ -235,11 +235,28 @@
                         <outlet property="searchBar" destination="aNw-cx-9JI" id="sI6-rb-TRQ"/>
                         <outlet property="tableView" destination="KYk-Qs-gPD" id="NPb-CM-qG9"/>
                         <outlet property="toDate" destination="hUP-lj-XU3" id="3uN-FK-NSt"/>
+                        <segue destination="VwO-lf-DUc" kind="show" identifier="searchToEntry" id="vnA-fJ-B0H"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1N6-mJ-dTL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3148.8549618320608" y="33.802816901408455"/>
+        </scene>
+        <!--Entry View Controller-->
+        <scene sceneID="M1D-Du-qvd">
+            <objects>
+                <viewController id="VwO-lf-DUc" customClass="EntryViewController" customModule="ManageUp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gMi-ag-c7o">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="pA6-0D-gqH"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="VSA-el-SG9"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zME-FX-EMj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4383" y="-264"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="E8b-gu-CBM">

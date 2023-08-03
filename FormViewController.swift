@@ -35,6 +35,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         view.addSubview(ttgTagView)
         
         tagEntryDropDown.optionArray = allTagsArray
+//        let config = TTGTextTagConfig()
         
         date.timeZone = TimeZone.current
         
@@ -49,7 +50,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                 if let e = error {
                     print(e)
                 } else {
-                    print("Successfully saved data")
+                    print("Successfully saved data.")
                 }
             }
         }
@@ -65,8 +66,6 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                 tags.append(newTag)
             }
             tagEntryDropDown.text = ""
-        } else {
-            print(tagEntryDropDown.text)
         }
     }
     
@@ -104,13 +103,6 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                 self.tagEntryDropDown.optionArray = self.allTagsArray
             }
         }
-    }
-    
-    //not in use right now in this file
-    func formatDate(date: Date) -> String {
-        let df = DateFormatter()
-        df.dateFormat = "MMMM dd yyyy"
-        return df.string(from:date)
     }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
