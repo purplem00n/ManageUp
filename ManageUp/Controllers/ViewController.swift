@@ -25,7 +25,13 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
     }
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        calendar.scope = .week
         print(date)
+    }
+    
+    // FSCalendarDataSource
+    func calendar(calendar: FSCalendar!, hasEventForDate date: NSDate!) -> Bool {
+        return true
     }
     
 
