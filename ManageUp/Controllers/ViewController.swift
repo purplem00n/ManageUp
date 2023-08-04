@@ -7,16 +7,27 @@
 
 import UIKit
 import FirebaseAuth
+import FSCalendar
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource {
+    
+    @IBOutlet var calendar: FSCalendar!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // not sure if I want a title, it becomes the text instead of "back" on the following page.
-//        title = "Manage Up: Home"
+
         navigationItem.hidesBackButton = true
-        // Do any additional setup after loading the view.
+        
+        calendar.dataSource = self
+        calendar.delegate = self
+        view.addSubview(calendar)
+
     }
+    
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        print(date)
+    }
+    
 
     @IBAction func addEntryPressed(_ sender: UIButton) {
         performSegue(withIdentifier: K.formSegue, sender: self)
