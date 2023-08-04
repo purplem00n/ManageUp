@@ -10,6 +10,7 @@ import UIKit
 
 struct Entry {
     let user: String
+    let id: String
     let text: String
     let tags: [String]
     let date: Date

@@ -20,7 +20,12 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     let ttgTagView = TTGTextTagCollectionView()
     
     let db = Firestore.firestore()
+    
+    //accept values from EntryViews here for editing
+    var entryValue: Entry = Entry(user: (Auth.auth().currentUser?.email)!, id: "", text: "", tags: [], date: Date.now)
     var tags: [String] = []
+    var dateValue: Date = Date.now
+    var textValue: String = ""
     
     var allTagsArray: [String] = []
     
@@ -29,10 +34,21 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         super.viewDidLoad()
         super.viewDidLayoutSubviews()
         
+        // assign initial values to the UI: if empty, or if editing existing values
+        tags = entryValue.tags
+        date.date = entryValue.date
+        entryText.text = entryValue.text
+        
         ttgTagView.frame = CGRect(x: 20, y: 148, width: view.frame.size.width, height: 150)
         ttgTagView.alignment = .left
         ttgTagView.delegate = self
         view.addSubview(ttgTagView)
+        
+        for tag in tags {
+            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: tag), style: TTGTextTagStyle())
+            ttgTagView.addTag(textTag)
+        }
+        ttgTagView.reload()
         
         tagEntryDropDown.optionArray = allTagsArray
         
@@ -42,19 +58,32 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         
     }
 
-    
+    // can probably clean this up
     @IBAction func submitPressed(_ sender: UIButton) {
-        if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
-            db.collection(K.FStore.collectionName).addDocument(data: [K.FStore.textField: textBody, K.FStore.dateField: date.date, K.FStore.userField: user, K.FStore.tagsField: tags]) { (error) in
-                if let e = error {
-                    print(e)
-                } else {
-                    print("Successfully saved data")
+        if entryValue.id == "" {
+            if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
+                db.collection(K.FStore.collectionName).document().setData([K.FStore.textField: textBody, K.FStore.dateField: date.date, K.FStore.userField: user, K.FStore.tagsField: tags]) { (error) in
+                    if let e = error {
+                        print(e)
+                    } else {
+                        self.performSegue(withIdentifier: K.submitSegue, sender: self)
+                        print("Successfully saved data.")
+                    }
+                }
+            }
+        } else {
+            if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
+                db.collection(K.FStore.collectionName).document(entryValue.id).setData([K.FStore.textField: textBody, K.FStore.dateField: date.date, K.FStore.userField: user, K.FStore.tagsField: tags]) { (error) in
+                    if let e = error {
+                        print(e)
+                    } else {
+                        self.performSegue(withIdentifier: K.submitSegue, sender: self)
+                        print("Successfully saved data.")
+                    }
                 }
             }
         }
     }
-    
     
     @IBAction func addTagPressed(_ sender: UIButton) {
         if let newTag = tagEntryDropDown.text, tagEntryDropDown.text != "" {
@@ -65,8 +94,6 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                 tags.append(newTag)
             }
             tagEntryDropDown.text = ""
-        } else {
-            print(tagEntryDropDown.text)
         }
     }
     
@@ -77,9 +104,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         // remove from tags list
         tags.remove(at: Int(index))
     }
-    
-    
-    
+
     func getAllUserTags() {
         db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
@@ -104,13 +129,6 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                 self.tagEntryDropDown.optionArray = self.allTagsArray
             }
         }
-    }
-    
-    //not in use right now in this file
-    func formatDate(date: Date) -> String {
-        let df = DateFormatter()
-        df.dateFormat = "MMMM dd yyyy"
-        return df.string(from:date)
     }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
