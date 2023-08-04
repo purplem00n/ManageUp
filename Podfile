@@ -11,6 +11,7 @@ pod 'FirebaseFirestore'
 pod 'IQKeyboardManagerSwift'
 pod 'iOSDropDown'
 pod 'TTGTagCollectionView'
+pod 'FSCalendar'
 
 
 
