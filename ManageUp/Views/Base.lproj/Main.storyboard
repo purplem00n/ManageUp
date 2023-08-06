@@ -430,7 +430,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ARF-Xl-pHh" customClass="FSCalendar">
-                                <rect key="frame" x="0.0" y="103" width="393" height="300"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="300"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="300" id="DRI-nJ-l5A"/>

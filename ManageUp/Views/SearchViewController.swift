@@ -27,6 +27,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     var allTags: [String] = []
     var selectedTags: [String] = []
     var selectedEntry: Entry = Entry(user: "", id: "", text: "", tags: [], date: Date.now)
+    var selectedDate: Date = Date.now
     
     
     override func viewDidLoad() {
@@ -52,6 +53,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     }
     
     func loadEntries() {
+        
+//        if selectedDate != Date.now {
+//
+//        }
         db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
             

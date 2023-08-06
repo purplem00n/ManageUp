@@ -24,7 +24,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     //accept values from EntryViews here for editing
     var entryValue: Entry = Entry(user: (Auth.auth().currentUser?.email)!, id: "", text: "", tags: [], date: Date.now)
     var tags: [String] = []
-    var dateValue: Date = Date.now
+    var selectedDate: Date = Date.now
     var textValue: String = ""
     
     var allTagsArray: [String] = []
@@ -36,8 +36,17 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         
         // assign initial values to the UI: if empty, or if editing existing values
         tags = entryValue.tags
-        date.date = entryValue.date
+//        date.date = entryValue.date
         entryText.text = entryValue.text
+        
+        if selectedDate == Date.now {
+            date.date = entryValue.date
+            print(date.date)
+        } else {
+            date.date = selectedDate
+            print(date.date)
+            print(selectedDate)
+        }
         
         ttgTagView.frame = CGRect(x: 20, y: 148, width: view.frame.size.width, height: 150)
         ttgTagView.alignment = .left
