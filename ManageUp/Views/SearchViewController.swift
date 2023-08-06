@@ -54,14 +54,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     
     func loadEntries() {
         
-        if selectedDate != Date.now {
+        let calendar = Calendar.current
+        let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: selectedDate)!
+        let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
+        let todayMidnight = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date.now)
+        
+        if fromDateReset < todayMidnight! {
             
             fromDate.date = selectedDate
             toDate.date = selectedDate
-            
-            let calendar = Calendar.current
-            let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: selectedDate)!
-            let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
             
             db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
                 (querySnapshot, err) in
@@ -83,7 +84,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
-                            print(self.filteredEntries.count)
+//                            print(self.filteredEntries.count)
                         } // this makes sure the table updates with the most current data.
                     }
                 }
@@ -116,35 +117,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
             }
         }
     }
-    // THIS WORKS to search text and tag field with date range
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//
-//        let calendar = Calendar.current
-//        let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: fromDate.date)!
-//        let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: toDate.date)!
-//
-//        filteredEntries = []
-//        if searchText == "" {
-//            filteredEntries = entries
-//        }
-//
-//        for entry in entries {
-//            for tag in entry.tags {
-//                if tag.uppercased().contains(searchText.uppercased()) && entry.date <= toDateReset && entry.date >= fromDateReset {
-//                    filteredEntries.append(entry)
-//                    print(entry.date, fromDateReset, toDateReset)
-//                }
-//            }
-//            if entry.text.uppercased().contains(searchText.uppercased()) && entry.date <= toDateReset && entry.date >= fromDateReset {
-//                filteredEntries.append(entry)
-//            }
-//        }
-//
-//        tableView.reloadData()
-//    }
     
-    //TESTING
-    // This logic is inside the search bar function, which means that it's requiring the text in the search bar to change before executing. I need a different initializer for this logic.
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         let calendar = Calendar.current
@@ -174,6 +147,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                             print(self.filteredEntries.count)
+                            // display a message if count == 0 ??
                         } // this makes sure the table updates with the most current data.
                     }
                 }
@@ -200,7 +174,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
-                            print(self.filteredEntries.count)
+//                            print(self.filteredEntries.count)
                         } // this makes sure the table updates with the most current data.
                     }
                 }
