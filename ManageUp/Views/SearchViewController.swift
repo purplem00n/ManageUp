@@ -54,30 +54,64 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     
     func loadEntries() {
         
-//        if selectedDate != Date.now {
-//
-//        }
-        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-            (querySnapshot, err) in
+        if selectedDate != Date.now {
             
-            self.entries = []
+            fromDate.date = selectedDate
+            toDate.date = selectedDate
             
-            if let e = err {
-                print("Error getting documents: \(e)")
-            } else {
-                if let snapshotDocuments = querySnapshot?.documents {
-                    for doc in snapshotDocuments {
-                        let data = doc.data()
-                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp, let id = doc.documentID as? String {
-                            let date = date.dateValue()
-                            let newEntry = Entry(user: user, id: id, text: text, tags: tags, date: date)
-                            self.entries.append(newEntry)
+            let calendar = Calendar.current
+            let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: selectedDate)!
+            let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
+            
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+                (querySnapshot, err) in
+
+                self.filteredEntries = []
+
+                if let e = err {
+                    print("Error getting documents: \(e)")
+                } else {
+                    if let snapshotDocuments = querySnapshot?.documents {
+                        for doc in snapshotDocuments {
+                            let data = doc.data()
+                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
+                                let date = date.dateValue()
+                                let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
+                                self.filteredEntries.append(newEntry)
+
+                            }
                         }
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                            print(self.filteredEntries.count)
+                        } // this makes sure the table updates with the most current data.
                     }
-                    self.filteredEntries = self.entries
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    } // this makes sure the table updates with the most current data.
+                }
+            }
+            
+        } else {
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+                (querySnapshot, err) in
+                
+                self.entries = []
+                
+                if let e = err {
+                    print("Error getting documents: \(e)")
+                } else {
+                    if let snapshotDocuments = querySnapshot?.documents {
+                        for doc in snapshotDocuments {
+                            let data = doc.data()
+                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp, let id = doc.documentID as? String {
+                                let date = date.dateValue()
+                                let newEntry = Entry(user: user, id: id, text: text, tags: tags, date: date)
+                                self.entries.append(newEntry)
+                            }
+                        }
+                        self.filteredEntries = self.entries
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        } // this makes sure the table updates with the most current data.
+                    }
                 }
             }
         }
