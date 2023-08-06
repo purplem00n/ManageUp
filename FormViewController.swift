@@ -41,11 +41,8 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         
         if selectedDate == Date.now {
             date.date = entryValue.date
-            print(date.date)
         } else {
             date.date = selectedDate
-            print(date.date)
-            print(selectedDate)
         }
         
         ttgTagView.frame = CGRect(x: 20, y: 148, width: view.frame.size.width, height: 150)

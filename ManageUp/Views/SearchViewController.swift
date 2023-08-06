@@ -146,7 +146,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
-                            print(self.filteredEntries.count)
+//                            print(self.filteredEntries.count)
                             // display a message if count == 0 ??
                         } // this makes sure the table updates with the most current data.
                     }
@@ -180,7 +180,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
                 }
             }
         }
-
         
     }
     
