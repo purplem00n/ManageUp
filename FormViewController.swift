@@ -36,30 +36,16 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         
         // assign initial values to the UI: if empty, or if editing existing values
         tags = entryValue.tags
-        //        date.date = entryValue.date
         entryText.text = entryValue.text
         
-        if entryValue.date != Date.now {
-            print("entryValue.date != date.now: \(entryValue.date) \(Date.now)")
+        let todayDateComponents = Calendar.current.dateComponents([.month, .day, .year], from: Date.now)
+        let entryValueDateComponents = Calendar.current.dateComponents([.month, .day, .year], from: entryValue.date)
+        
+        if entryValueDateComponents != todayDateComponents {
             date.date = entryValue.date
-        }
-        if !(date.date < Date.now) {
-            print("date.date < date.now: \(selectedDate), \(date.date) < \(Date.now)")
+        } else {
             date.date = selectedDate
         }
-        
-//        if entryValue.date.compare(Date.now) != .orderedSame {
-//            print("entryValue.date != date.now: \(entryValue.date) \(Date.now)")
-//            date.date = entryValue.date
-//        } else {
-//            date.date = selectedDate
-//        }
-            
-            //        if selectedDate == Date.now {
-            //            date.date = entryValue.date
-            //        } else {
-            //            date.date = selectedDate
-            //        }
             
             ttgTagView.frame = CGRect(x: 20, y: 148, width: view.frame.size.width, height: 150)
             ttgTagView.alignment = .left
