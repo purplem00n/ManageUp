@@ -34,8 +34,8 @@ class EntryViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == K.editSegue {
-            if let entryViewController = segue.destination as? FormViewController {
-                entryViewController.entryValue = entry
+            if let formViewController = segue.destination as? FormViewController {
+                formViewController.entryValue = entry
             }
         }
     }

@@ -27,6 +27,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     var allTags: [String] = []
     var selectedTags: [String] = []
     var selectedEntry: Entry = Entry(user: "", id: "", text: "", tags: [], date: Date.now)
+    var selectedDate: Date = Date.now
     
     
     override func viewDidLoad() {
@@ -52,60 +53,71 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     }
     
     func loadEntries() {
-        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-            (querySnapshot, err) in
+        
+        let calendar = Calendar.current
+        let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: selectedDate)!
+        let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
+        let todayMidnight = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date.now)
+        
+        if fromDateReset < todayMidnight! {
             
-            self.entries = []
+            fromDate.date = selectedDate
+            toDate.date = selectedDate
             
-            if let e = err {
-                print("Error getting documents: \(e)")
-            } else {
-                if let snapshotDocuments = querySnapshot?.documents {
-                    for doc in snapshotDocuments {
-                        let data = doc.data()
-                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp, let id = doc.documentID as? String {
-                            let date = date.dateValue()
-                            let newEntry = Entry(user: user, id: id, text: text, tags: tags, date: date)
-                            self.entries.append(newEntry)
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+                (querySnapshot, err) in
+
+                self.filteredEntries = []
+
+                if let e = err {
+                    print("Error getting documents: \(e)")
+                } else {
+                    if let snapshotDocuments = querySnapshot?.documents {
+                        for doc in snapshotDocuments {
+                            let data = doc.data()
+                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
+                                let date = date.dateValue()
+                                let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
+                                self.filteredEntries.append(newEntry)
+
+                            }
                         }
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+//                            print(self.filteredEntries.count)
+                        } // this makes sure the table updates with the most current data.
                     }
-                    self.filteredEntries = self.entries
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    } // this makes sure the table updates with the most current data.
+                }
+            }
+            
+        } else {
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+                (querySnapshot, err) in
+                
+                self.entries = []
+                
+                if let e = err {
+                    print("Error getting documents: \(e)")
+                } else {
+                    if let snapshotDocuments = querySnapshot?.documents {
+                        for doc in snapshotDocuments {
+                            let data = doc.data()
+                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp, let id = doc.documentID as? String {
+                                let date = date.dateValue()
+                                let newEntry = Entry(user: user, id: id, text: text, tags: tags, date: date)
+                                self.entries.append(newEntry)
+                            }
+                        }
+                        self.filteredEntries = self.entries
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        } // this makes sure the table updates with the most current data.
+                    }
                 }
             }
         }
     }
-    // THIS WORKS to search text and tag field with date range
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//
-//        let calendar = Calendar.current
-//        let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: fromDate.date)!
-//        let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: toDate.date)!
-//
-//        filteredEntries = []
-//        if searchText == "" {
-//            filteredEntries = entries
-//        }
-//
-//        for entry in entries {
-//            for tag in entry.tags {
-//                if tag.uppercased().contains(searchText.uppercased()) && entry.date <= toDateReset && entry.date >= fromDateReset {
-//                    filteredEntries.append(entry)
-//                    print(entry.date, fromDateReset, toDateReset)
-//                }
-//            }
-//            if entry.text.uppercased().contains(searchText.uppercased()) && entry.date <= toDateReset && entry.date >= fromDateReset {
-//                filteredEntries.append(entry)
-//            }
-//        }
-//
-//        tableView.reloadData()
-//    }
     
-    //TESTING
-    // This logic is inside the search bar function, which means that it's requiring the text in the search bar to change before executing. I need a different initializer for this logic.
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         let calendar = Calendar.current
@@ -134,7 +146,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
-                            print(self.filteredEntries.count)
+//                            print(self.filteredEntries.count)
+                            // display a message if count == 0 ??
                         } // this makes sure the table updates with the most current data.
                     }
                 }
@@ -161,13 +174,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
                         }
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
-                            print(self.filteredEntries.count)
+//                            print(self.filteredEntries.count)
                         } // this makes sure the table updates with the most current data.
                     }
                 }
             }
         }
-
         
     }
     
@@ -271,8 +283,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
                 }
                 tagSelector.text = ""
             } else {
-                // pop up error message?
-                print("Must choose an existing tag")
+                displayTagErrorAlert()
             }
         }
     }
@@ -319,6 +330,23 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
         return df.string(from:date)
     }
     
+    func displayTagErrorAlert() {
+        // Declare Alert message
+        let dialogMessage = UIAlertController(title: "Error", message: "You must choose an existing tag", preferredStyle: .alert)
+        
+        // Create OK button with action handler
+        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            print("Ok button tapped")
+        })
+        
+        //Add OK and Cancel button to dialog message
+        dialogMessage.addAction(ok)
+        
+        // Present dialog message to user
+        self.present(dialogMessage, animated: true, completion: nil)
+        
+    }
+    
 }
 
 
@@ -335,8 +363,6 @@ extension SearchViewController: UITableViewDataSource {
         cell?.textLabel?.text = String(filteredEntries[indexPath.row].text.prefix(33))
         return cell!
     }
-    
-    
 }
 
 extension SearchViewController: UITableViewDelegate {

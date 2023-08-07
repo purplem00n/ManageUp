@@ -12,6 +12,7 @@ import FirebaseCore
 import IQKeyboardManagerSwift
 import iOSDropDown
 import TTGTags
+import FSCalendar
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
