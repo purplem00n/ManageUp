@@ -67,11 +67,6 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         let dateComponents = Calendar.current.dateComponents([.month, .day, .year], from: date)
         return datesWithEntry[dateComponents] ?? 0
-//        if datesWithEntry.contains(dateComponents) {
-//            return 1
-//        } else {
-//            return 0
-//        }
     }
     
     // let the segue send selected data to the next screen

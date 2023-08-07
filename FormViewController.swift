@@ -82,6 +82,10 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         
         // can probably clean this up
         @IBAction func submitPressed(_ sender: UIButton) {
+            if textValue == "" {
+                displayAlert()
+                return
+            }
             if entryValue.id == "" {
                 if let textBody = entryText.text, let user = Auth.auth().currentUser?.email {
                     db.collection(K.FStore.collectionName).document().setData([K.FStore.textField: textBody, K.FStore.dateField: date.date, K.FStore.userField: user, K.FStore.tagsField: tags]) { (error) in
@@ -152,6 +156,23 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                 }
             }
         }
+    
+    func displayAlert() {
+        // Declare Alert message
+        let dialogMessage = UIAlertController(title: "Error", message: "Please add text to your entry", preferredStyle: .alert)
+        
+        // Create OK button with action handler
+        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            print("Ok button tapped")
+        })
+        
+        //Add OK and Cancel button to dialog message
+        dialogMessage.addAction(ok)
+        
+        // Present dialog message to user
+        self.present(dialogMessage, animated: true, completion: nil)
+        
+    }
         
         @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
             do {
