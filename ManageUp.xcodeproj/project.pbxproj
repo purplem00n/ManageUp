@@ -21,6 +21,7 @@
 		5C764F5A2A708328004D4173 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C764F592A708328004D4173 /* Entry.swift */; };
 		5C764F5C2A718E40004D4173 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C764F5B2A718E40004D4173 /* Constants.swift */; };
 		5C7EBB372A7BFD3A006DEA51 /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7EBB362A7BFD3A006DEA51 /* EntryViewController.swift */; };
+		5C7EBB392A816369006DEA51 /* MUBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7EBB382A816369006DEA51 /* MUBrain.swift */; };
 		5CD68B352A703F2100F3F0F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5CD68B342A703F2100F3F0F9 /* GoogleService-Info.plist */; };
 		DB174A774D81CAF72276EE12 /* Pods_ManageUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C18F01EDAC3AAE203D832A9C /* Pods_ManageUp.framework */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 		5C764F592A708328004D4173 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
 		5C764F5B2A718E40004D4173 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5C7EBB362A7BFD3A006DEA51 /* EntryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EntryViewController.swift; path = ManageUp/Views/EntryViewController.swift; sourceTree = SOURCE_ROOT; };
+		5C7EBB382A816369006DEA51 /* MUBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MUBrain.swift; sourceTree = "<group>"; };
 		5CD68B342A703F2100F3F0F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C18F01EDAC3AAE203D832A9C /* Pods_ManageUp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ManageUp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				5C764F592A708328004D4173 /* Entry.swift */,
+				5C7EBB382A816369006DEA51 /* MUBrain.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 				5C48B1262A6B5C85004A8E42 /* WelcomeViewController.swift in Sources */,
 				5C48B10B2A6AEBA9004A8E42 /* AppDelegate.swift in Sources */,
 				5C764F5C2A718E40004D4173 /* Constants.swift in Sources */,
+				5C7EBB392A816369006DEA51 /* MUBrain.swift in Sources */,
 				5C7EBB372A7BFD3A006DEA51 /* EntryViewController.swift in Sources */,
 				5C48B1282A6B5D30004A8E42 /* RegisterViewController.swift in Sources */,
 				5C764F5A2A708328004D4173 /* Entry.swift in Sources */,
