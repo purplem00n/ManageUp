@@ -283,8 +283,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
                 }
                 tagSelector.text = ""
             } else {
-                // pop up error message?
-                print("Must choose an existing tag")
+                displayTagErrorAlert()
             }
         }
     }
@@ -331,6 +330,23 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
         return df.string(from:date)
     }
     
+    func displayTagErrorAlert() {
+        // Declare Alert message
+        let dialogMessage = UIAlertController(title: "Error", message: "You must choose an existing tag", preferredStyle: .alert)
+        
+        // Create OK button with action handler
+        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            print("Ok button tapped")
+        })
+        
+        //Add OK and Cancel button to dialog message
+        dialogMessage.addAction(ok)
+        
+        // Present dialog message to user
+        self.present(dialogMessage, animated: true, completion: nil)
+        
+    }
+    
 }
 
 
@@ -347,8 +363,6 @@ extension SearchViewController: UITableViewDataSource {
         cell?.textLabel?.text = String(filteredEntries[indexPath.row].text.prefix(33))
         return cell!
     }
-    
-    
 }
 
 extension SearchViewController: UITableViewDelegate {
