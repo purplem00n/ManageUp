@@ -16,7 +16,7 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
     
     let db = Firestore.firestore()
     
-    var datesWithEntry: [DateComponents] = []
+    var datesWithEntry: [DateComponents: Int] = [:]
     var selectedDate: Date = Date.now
     
 
@@ -26,6 +26,8 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
         navigationItem.hidesBackButton = true
         
         findDatesWithEntries()
+        
+        navigationItem.title = "Manage Up"
         
         calendar.dataSource = self
         calendar.delegate = self
@@ -38,7 +40,7 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
         db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).addSnapshotListener {
                 (querySnapshot, err) in
 
-                self.datesWithEntry = []
+            self.datesWithEntry = [:]
 
                 if let e = err {
                     print("Error getting documents: \(e)")
@@ -49,9 +51,7 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
                             if let date = data[K.FStore.dateField] as? Timestamp {
                                 let date = date.dateValue()
                                 let dateComponents = Calendar.current.dateComponents([.month, .day, .year], from: date)
-                                if !self.datesWithEntry.contains(dateComponents) {
-                                    self.datesWithEntry.append(dateComponents)
-                                }
+                                self.datesWithEntry[dateComponents] = (self.datesWithEntry[dateComponents] ?? 0) + 1
                             }
                         }
                     }
@@ -66,11 +66,12 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         let dateComponents = Calendar.current.dateComponents([.month, .day, .year], from: date)
-        if datesWithEntry.contains(dateComponents) {
-            return 1
-        } else {
-            return 0
-        }
+        return datesWithEntry[dateComponents] ?? 0
+//        if datesWithEntry.contains(dateComponents) {
+//            return 1
+//        } else {
+//            return 0
+//        }
     }
     
     // let the segue send selected data to the next screen
