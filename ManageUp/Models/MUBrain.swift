@@ -50,10 +50,10 @@ class MUBrain {
             }
     }
     
-    func resetDate(date: Date) {
+    func resetDate(fromDate: Date, toDate: Date) {
         let calendar = Calendar.current
-        fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
-        toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
+        fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: fromDate)!
+        toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: toDate)!
         todayMidnight = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date.now)!
     }
     
@@ -62,7 +62,7 @@ class MUBrain {
     }
     
     func loadEntries(fromDate: UIDatePicker, toDate: UIDatePicker, tableView: UITableView) {
-        resetDate(date: selectedDate)
+        resetDate(fromDate: selectedDate, toDate: selectedDate)
         
         if convertDateToDateComponents(date: fromDateReset) == convertDateToDateComponents(date: todayMidnight) {
             fromDateReset = fromDate.date
@@ -111,26 +111,7 @@ class MUBrain {
         db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
             
-            self.filteredEntries = []
-            
-            if let e = err {
-                print("Error getting documents: \(e)")
-            } else {
-                if let snapshotDocuments = querySnapshot?.documents {
-                    for doc in snapshotDocuments {
-                        let data = doc.data()
-                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
-                            let date = date.dateValue()
-                            let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
-                            self.filteredEntries.append(newEntry)
-                        }
-                    }
-                    DispatchQueue.main.async {
-                        tableView.reloadData()
-                        //print(self.filteredEntries.count) - if 0, display no results found to user?
-                    } // this makes sure the table updates with the most current data.
-                }
-            }
+            self.queryClosure(querySnapshot: querySnapshot, error: err, tableView: tableView)
         }
     }
     
@@ -139,52 +120,74 @@ class MUBrain {
         db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
             
-            self.filteredEntries = []
-            
-            if let e = err {
-                print("Error getting documents: \(e)")
-            } else {
-                if let snapshotDocuments = querySnapshot?.documents {
-                    for doc in snapshotDocuments {
-                        let data = doc.data()
-                        if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
-                            let date = date.dateValue()
-                            let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
+            self.queryClosure(querySnapshot: querySnapshot, error: err, tableView: tableView)
+        }
+    }
+    
+  // This code appears twice: I could make this helper function, or just leave it 2 times?
+    func queryClosure(querySnapshot: QuerySnapshot?, error: Error?, tableView: UITableView) {
+        self.filteredEntries = []
+
+        if let e = error {
+            print("Error getting documents: \(e)")
+        } else {
+            if let snapshotDocuments = querySnapshot?.documents {
+                for doc in snapshotDocuments {
+                    let data = doc.data()
+                    if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
+                        let date = date.dateValue()
+                        let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
+                        self.filteredEntries.append(newEntry)
+                    }
+                }
+                DispatchQueue.main.async {
+                    tableView.reloadData()
+                    // print(self.filteredEntries.count)
+                    // display a message if count == 0 ??
+                } // this makes sure the table updates with the most current data.
+            }
+        }
+    }
+    
+    func queryClosureWithText(querySnapshot: QuerySnapshot?, error: Error?, tableView: UITableView, searchText: String) {
+        self.filteredEntries = []
+
+        if let e = error {
+            print("Error getting documents: \(e)")
+        } else {
+            if let snapshotDocuments = querySnapshot?.documents {
+                for doc in snapshotDocuments {
+                    let data = doc.data()
+                    if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
+                        let date = date.dateValue()
+                        let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
+                        if newEntry.text.uppercased().contains(searchText.uppercased()) {
                             self.filteredEntries.append(newEntry)
                         }
                     }
-                    DispatchQueue.main.async {
-                        tableView.reloadData()
-                        // print(self.filteredEntries.count)
-                        // display a message if count == 0 ??
-                    } // this makes sure the table updates with the most current data.
                 }
+                DispatchQueue.main.async {
+                    tableView.reloadData()
+//                            print(self.filteredEntries.count)
+                    // display a message if count == 0 ??
+                } // this makes sure the table updates with the most current data.
             }
         }
     }
     
     func textSearch(searchText: String, tableView: UITableView) {
-        // not working yet
-        var textInEntry: [Entry] = []
-        
-        if selectedTags == [] {
-            queryEntriesWithDates(tableView: tableView)
-        } else {
-            queryWithDateTags(tableView: tableView)
-        }
-        
-        if searchText == "" {
-            filteredEntries = entries
-        }
-        
-        for entry in filteredEntries {
-            if entry.text.uppercased().contains(searchText.uppercased()) {
-                textInEntry.append(entry)
+        if selectedTags != [] {
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+                (querySnapshot, err) in
+                
+                self.queryClosureWithText(querySnapshot: querySnapshot, error: err, tableView: tableView, searchText: searchText)
             }
-        }
-        filteredEntries = textInEntry
-        DispatchQueue.main.async {
-            tableView.reloadData()
+        } else {
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+                (querySnapshot, err) in
+                
+                self.queryClosureWithText(querySnapshot: querySnapshot, error: err, tableView: tableView, searchText: searchText)
+            }
         }
     }
     

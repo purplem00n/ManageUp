@@ -13,8 +13,6 @@ import TTGTags
 
 class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCollectionViewDelegate {
     
-    //    let db = Firestore.firestore()
-    
     var muBrain: MUBrain = MUBrain()
     
     @IBOutlet weak var searchBar: UISearchBar!
@@ -52,23 +50,20 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        //
-//        if muBrain.selectedTags != [] {
-//            muBrain.queryWithDateTags(tableView: tableView)
-//        } else {
-//            muBrain.queryEntriesWithDates(tableView: tableView)
-//        }
-        
-        // how do I make it so the first queries only run when a tag or dates change, and this is the only function that actually runs when text did change.
-        // then I think it doesn't make query every time the text changes, I'll just search throught the list of qualifying entries.
-        muBrain.textSearch(searchText: searchText, tableView: tableView)
-        
+        muBrain.resetDate(fromDate: fromDate.date, toDate: toDate.date)
+        if searchText == "" {
+            if muBrain.selectedTags == [] {
+                muBrain.queryEntriesWithDates(tableView: tableView)
+            } else {
+                muBrain.queryWithDateTags(tableView: tableView)
+            }
+        } else {
+            muBrain.textSearch(searchText: searchText, tableView: tableView)
+        }
     }
     
-    @IBAction func searchButtonPressed(_ sender: UIButton) {t
-        
-        muBrain.fromDateReset = fromDate.date
-        muBrain.toDateReset = toDate.date
+    @IBAction func searchButtonPressed(_ sender: UIButton) {
+        muBrain.resetDate(fromDate: fromDate.date, toDate: toDate.date)
         
         if muBrain.selectedTags != [] {
             muBrain.queryWithDateTags(tableView: tableView)
@@ -76,7 +71,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
             muBrain.queryEntriesWithDates(tableView: tableView)
         }
     }
-    
     
     // let the segue send selected vars data to the next screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
