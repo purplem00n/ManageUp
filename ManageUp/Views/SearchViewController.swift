@@ -13,21 +13,14 @@ import TTGTags
 
 class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCollectionViewDelegate {
     
-    let db = Firestore.firestore()
+    var muBrain: MUBrain = MUBrain()
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var fromDate: UIDatePicker!
     @IBOutlet weak var toDate: UIDatePicker!
     @IBOutlet weak var tagSelector: DropDown!
-    let ttgTagView = TTGTextTagCollectionView()
-    
-    var entries: [Entry] = []
-    var filteredEntries: [Entry] = []
-    var allTags: [String] = []
-    var selectedTags: [String] = []
-    var selectedEntry: Entry = Entry(user: "", id: "", text: "", tags: [], date: Date.now)
-    var selectedDate: Date = Date.now
+    @IBOutlet weak var ttgTagView: TTGTextTagCollectionView!
     
     
     override func viewDidLoad() {
@@ -40,327 +33,91 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
         fromDate.timeZone = TimeZone.current
         toDate.timeZone = TimeZone.current
         
-        // initialize tag view
-        ttgTagView.frame = CGRect(x: 20, y: 275, width: view.frame.size.width, height: 50)
-        ttgTagView.alignment = .left
         ttgTagView.delegate = self
-        view.addSubview(ttgTagView)
         
-        tagSelector.optionArray = allTags
+        tagSelector.optionArray = muBrain.allTags
         
-        loadEntries()
-        getAllUserTags()
-    }
-    
-    func loadEntries() {
+        muBrain.loadEntries(fromDate: fromDate, toDate: toDate, tableView: tableView)
         
-        let calendar = Calendar.current
-        let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: selectedDate)!
-        let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
-        let todayMidnight = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date.now)
+        // fromDate displays today's date if there is no selected date and returns all entries
+        fromDate.date = muBrain.selectedDate
+        toDate.date = muBrain.selectedDate
         
-        if fromDateReset < todayMidnight! {
-            
-            fromDate.date = selectedDate
-            toDate.date = selectedDate
-            
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-                (querySnapshot, err) in
-
-                self.filteredEntries = []
-
-                if let e = err {
-                    print("Error getting documents: \(e)")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
-                                let date = date.dateValue()
-                                let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
-                                self.filteredEntries.append(newEntry)
-
-                            }
-                        }
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-//                            print(self.filteredEntries.count)
-                        } // this makes sure the table updates with the most current data.
-                    }
-                }
-            }
-            
-        } else {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-                (querySnapshot, err) in
-                
-                self.entries = []
-                
-                if let e = err {
-                    print("Error getting documents: \(e)")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp, let id = doc.documentID as? String {
-                                let date = date.dateValue()
-                                let newEntry = Entry(user: user, id: id, text: text, tags: tags, date: date)
-                                self.entries.append(newEntry)
-                            }
-                        }
-                        self.filteredEntries = self.entries
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        } // this makes sure the table updates with the most current data.
-                    }
-                }
-            }
-        }
+        muBrain.getAllUserTags(tagSelector: tagSelector)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        let calendar = Calendar.current
-        let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: fromDate.date)!
-        let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: toDate.date)!
-        
-        if selectedTags != [] {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-                (querySnapshot, err) in
-
-                self.filteredEntries = []
-
-                if let e = err {
-                    print("Error getting documents: \(e)")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
-                                let date = date.dateValue()
-                                let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
-                                if newEntry.text.uppercased().contains(searchText.uppercased()) {
-                                    self.filteredEntries.append(newEntry)
-                                }
-                            }
-                        }
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-//                            print(self.filteredEntries.count)
-                            // display a message if count == 0 ??
-                        } // this makes sure the table updates with the most current data.
-                    }
-                }
+        muBrain.resetDate(fromDate: fromDate.date, toDate: toDate.date)
+        if searchText == "" {
+            if muBrain.selectedTags == [] {
+                muBrain.queryEntriesWithDates(tableView: tableView)
+            } else {
+                muBrain.queryWithDateTags(tableView: tableView)
             }
         } else {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-                (querySnapshot, err) in
-
-                self.filteredEntries = []
-
-                if let e = err {
-                    print("Error getting documents: \(e)")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
-                                let date = date.dateValue()
-                                let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
-                                if newEntry.text.uppercased().contains(searchText.uppercased()) {
-                                    self.filteredEntries.append(newEntry)
-                                }
-                            }
-                        }
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-//                            print(self.filteredEntries.count)
-                        } // this makes sure the table updates with the most current data.
-                    }
-                }
-            }
+            muBrain.textSearch(searchText: searchText, tableView: tableView)
         }
-        
     }
     
     @IBAction func searchButtonPressed(_ sender: UIButton) {
-        let calendar = Calendar.current
-        let fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: fromDate.date)!
-        let toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: toDate.date)!
+        muBrain.resetDate(fromDate: fromDate.date, toDate: toDate.date)
         
-        if selectedTags != [] {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-                (querySnapshot, err) in
-                
-                self.filteredEntries = []
-                
-                if let e = err {
-                    print("Error getting documents: \(e)")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
-                                let date = date.dateValue()
-                                let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
-                                if self.searchBar.text != "" {
-                                    if newEntry.text.uppercased().contains(self.searchBar.text!.uppercased()) {
-                                        self.filteredEntries.append(newEntry)
-                                    }
-                                } else {
-                                    self.filteredEntries.append(newEntry)
-                                }
-                            }
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                                print(self.filteredEntries.count)
-                            } // this makes sure the table updates with the most current data.
-                        }
-                    }
-                }
-            }
+        if muBrain.selectedTags != [] {
+            muBrain.queryWithDateTags(tableView: tableView)
         } else {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-                (querySnapshot, err) in
-
-                self.filteredEntries = []
-
-                if let e = err {
-                    print("Error getting documents: \(e)")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
-                                let date = date.dateValue()
-                                let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
-                                if self.searchBar.text != "" {
-                                    if newEntry.text.uppercased().contains(self.searchBar.text!.uppercased()) {
-                                        self.filteredEntries.append(newEntry)
-                                    }
-                                } else {
-                                    self.filteredEntries.append(newEntry)
-                                }
-                            }
-                        }
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                            print(self.filteredEntries.count)
-                        } // this makes sure the table updates with the most current data.
-                    }
-                }
-            }
+            muBrain.queryEntriesWithDates(tableView: tableView)
         }
-
     }
-    
     
     // let the segue send selected vars data to the next screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == K.entrySegue {
             if let entryViewController = segue.destination as? EntryViewController {
-                entryViewController.entry = selectedEntry
+                entryViewController.muBrain = muBrain
             }
         }
     }
-
+    
     func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
         // remove tags on tap
         ttgTagView.removeTag(tag)
         ttgTagView.reload()
         // remove from tags list
-        selectedTags.remove(at: Int(index))
+        muBrain.selectedTags.remove(at: Int(index))
     }
     
     @IBAction func addTagPressed(_ sender: UIButton) {
         if let newTag = tagSelector.text, tagSelector.text != "" {
-            if allTags.contains(newTag) {
+            if muBrain.allTags.contains(newTag) {
                 let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: TTGTextTagStyle())
                 ttgTagView.addTag(textTag)
                 ttgTagView.reload()
-                if !selectedTags.contains(newTag) {
-                    selectedTags.append(newTag)
+                if !muBrain.selectedTags.contains(newTag) {
+                    muBrain.selectedTags.append(newTag)
                 }
                 tagSelector.text = ""
             } else {
-                displayTagErrorAlert()
-            }
-        }
-    }
-    
-    
-    func getAllUserTags() {
-        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-            (querySnapshot, err) in
-            
-            self.allTags = []
-            
-            if let e = err {
-                print("Error getting documents: \(e)")
-            } else {
-                if let snapshotDocuments = querySnapshot?.documents {
-                    for doc in snapshotDocuments {
-                        let data = doc.data()
-                        if let tags = data[K.FStore.tagsField] as? [String] {
-                            for tag in tags {
-                                if !self.allTags.contains(tag) {
-                                    self.allTags.append(tag)
-                                }
-                            }
-                        }
-                    }
-                }
-                self.tagSelector.optionArray = self.allTags
+                muBrain.displayAlert(message: K.AlertMessage.tagError, screen: self)
             }
         }
     }
     
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
-        do {
-            try Auth.auth().signOut()
-            navigationController?.popToRootViewController(animated: true)
-        } catch let signOutError as NSError {
-            print("Error signing out: %@", signOutError)
-        }
+        muBrain.logout(screen: self)
     }
-    
-    func formatDate(date: Date) -> String {
-        let df = DateFormatter()
-        df.dateFormat = "MMMM dd"
-        return df.string(from:date)
-    }
-    
-    func displayTagErrorAlert() {
-        // Declare Alert message
-        let dialogMessage = UIAlertController(title: "Error", message: "You must choose an existing tag", preferredStyle: .alert)
-        
-        // Create OK button with action handler
-        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-            print("Ok button tapped")
-        })
-        
-        //Add OK and Cancel button to dialog message
-        dialogMessage.addAction(ok)
-        
-        // Present dialog message to user
-        self.present(dialogMessage, animated: true, completion: nil)
-        
-    }
-    
 }
-
 
 //populates table view
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredEntries.count
+        return muBrain.filteredEntries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell")
-        let dateString = formatDate(date: filteredEntries[indexPath.row].date)
+        let dateString = muBrain.formatDate(date: muBrain.filteredEntries[indexPath.row].date, format: K.DateFormat.tableDate)
         cell?.detailTextLabel?.text = dateString
-        cell?.textLabel?.text = String(filteredEntries[indexPath.row].text.prefix(33))
+        cell?.textLabel?.text = String(muBrain.filteredEntries[indexPath.row].text.prefix(33))
         return cell!
     }
 }
@@ -368,7 +125,8 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // this function is the action upon tapping on a table row
-        selectedEntry = filteredEntries[indexPath.row]
+        muBrain.selectedEntry = muBrain.filteredEntries[indexPath.row]
+        muBrain.selectedTags = muBrain.filteredEntries[indexPath.row].tags
         performSegue(withIdentifier: K.entrySegue, sender: self)
     }
 }

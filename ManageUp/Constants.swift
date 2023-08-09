@@ -25,6 +25,17 @@ struct K {
         
     }
     
+    struct AlertMessage {
+        static let errorTitle = "Error"
+        static let tagError = "You must choose an existing tag"
+        static let noTextError = "Please add text to your entry"
+    }
+    
+    struct DateFormat {
+        static let tableDate = "MMMM dd"
+        static let entryDate = "MMMM dd, yyyy"
+    }
+    
 //    struct Colors {
 //        let blue = UIColor.blue
 //        let red = UIColor.red

@@ -16,15 +16,12 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
     
     @IBAction func loginPressed(_ sender: UIButton) {
-        
         if let email = emailTextField.text, let password = passwordTextField.text {
             Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
                 if let e = error {
-                    print(e)
                     self.errorLabel.text = e.localizedDescription
                 } else {
                     self.performSegue(withIdentifier: K.loginSegue, sender: self)
@@ -32,5 +29,4 @@ class LoginViewController: UIViewController {
             }
         }
     }
-
 }
