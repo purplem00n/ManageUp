@@ -29,6 +29,7 @@ struct K {
         static let errorTitle = "Error"
         static let tagError = "You must choose an existing tag"
         static let noTextError = "Please add text to your entry"
+        static let duplicateTag = "This tag has already been added"
     }
     
     struct DateFormat {

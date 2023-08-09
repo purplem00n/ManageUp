@@ -34,6 +34,9 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
             ttgTagView.addTag(textTag)
         }
         ttgTagView.reload()
+        
+//        let tagStyle = TTGTextTagStyle()
+//        tagStyle.backgroundColor = UIColor.white // not working
 
         muBrain.getAllUserTags(tagSelector: tagEntryDropDown)
         // set the drop down menu to display all tags
@@ -47,13 +50,19 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     }
     
     @IBAction func addTagPressed(_ sender: UIButton) {
+        let tagStyle = TTGTextTagStyle()
+        tagStyle.backgroundColor = UIColor.white
+        tagStyle.borderWidth = 3
+        tagStyle.extraSpace = CGSize(width: 4, height: 4)
         // if tag is not an empty string, create a new tag item, add it to the tag viewer, and add it to the array of selected tags
         if let newTag = tagEntryDropDown.text, tagEntryDropDown.text != "" {
-            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: TTGTextTagStyle())
-            ttgTagView.addTag(textTag)
-            ttgTagView.reload()
+            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: tagStyle)
             if !muBrain.selectedTags.contains(newTag) {
                 muBrain.selectedTags.append(newTag)
+                ttgTagView.addTag(textTag)
+                ttgTagView.reload()
+            } else {
+                muBrain.displayAlert(message: K.AlertMessage.duplicateTag, screen: self)
             }
             tagEntryDropDown.text = ""
         }
