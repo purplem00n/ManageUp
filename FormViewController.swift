@@ -18,7 +18,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     @IBOutlet weak var date: UIDatePicker!
     @IBOutlet weak var tagEntryDropDown: DropDown!
     @IBOutlet weak var entryText: UITextView!
-    let ttgTagView = TTGTextTagCollectionView()
+    @IBOutlet weak var ttgTagView: TTGTextTagCollectionView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +27,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         date.date = muBrain.displayDate()
         date.timeZone = TimeZone.current
         
-        ttgTagView.frame = CGRect(x: 20, y: 148, width: view.frame.size.width, height: 150)
-        ttgTagView.alignment = .left
         ttgTagView.delegate = self
-        view.addSubview(ttgTagView)
         
         for tag in muBrain.selectedEntry.tags {
             let textTag = TTGTextTag(content: TTGTextTagStringContent(text: tag), style: TTGTextTagStyle())

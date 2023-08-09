@@ -20,7 +20,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     @IBOutlet weak var fromDate: UIDatePicker!
     @IBOutlet weak var toDate: UIDatePicker!
     @IBOutlet weak var tagSelector: DropDown!
-    let ttgTagView = TTGTextTagCollectionView()
+    @IBOutlet weak var ttgTagView: TTGTextTagCollectionView!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,17 +33,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
         fromDate.timeZone = TimeZone.current
         toDate.timeZone = TimeZone.current
         
-        // initialize tag view
-        ttgTagView.frame = CGRect(x: 20, y: 275, width: view.frame.size.width, height: 50)
-        ttgTagView.alignment = .left
         ttgTagView.delegate = self
-        view.addSubview(ttgTagView)
         
         tagSelector.optionArray = muBrain.allTags
         
         muBrain.loadEntries(fromDate: fromDate, toDate: toDate, tableView: tableView)
         
-        // TODO: fromDate displays today's date when it should show 010123 reflecting that it returns all entries
+        // fromDate displays today's date if there is no selected date and returns all entries
         fromDate.date = muBrain.selectedDate
         toDate.date = muBrain.selectedDate
         
