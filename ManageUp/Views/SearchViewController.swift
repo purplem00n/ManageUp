@@ -129,6 +129,7 @@ extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // this function is the action upon tapping on a table row
         muBrain.selectedEntry = muBrain.filteredEntries[indexPath.row]
+        muBrain.selectedTags = muBrain.filteredEntries[indexPath.row].tags
         performSegue(withIdentifier: K.entrySegue, sender: self)
     }
 }

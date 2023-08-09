@@ -124,7 +124,6 @@ class MUBrain {
         }
     }
     
-  // This code appears twice: I could make this helper function, or just leave it 2 times?
     func queryClosure(querySnapshot: QuerySnapshot?, error: Error?, tableView: UITableView) {
         self.filteredEntries = []
 
