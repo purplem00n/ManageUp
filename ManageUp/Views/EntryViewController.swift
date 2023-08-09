@@ -18,7 +18,7 @@ class EntryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // populate fields with selected entry if applicable
+        // populate fields with selected entry data
         textDisplay.text = muBrain.selectedEntry.text
         dateLabel.text = muBrain.formatDate(date: muBrain.selectedEntry.date, format: K.DateFormat.entryDate)
         tagsLabel.text! = muBrain.selectedEntry.tags.joined(separator: ", ")
@@ -26,7 +26,6 @@ class EntryViewController: UIViewController {
     }
     
     @IBAction func editButtonPressed(_ sender: Any) {
-        // take back to form controller, passing Entry data
         performSegue(withIdentifier: K.editSegue, sender: self)
     }
     

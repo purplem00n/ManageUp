@@ -65,7 +65,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
         
     }
     
-    @IBAction func searchButtonPressed(_ sender: UIButton) {
+    @IBAction func searchButtonPressed(_ sender: UIButton) {t
         
         muBrain.fromDateReset = fromDate.date
         muBrain.toDateReset = toDate.date
@@ -114,7 +114,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         muBrain.logout(screen: self)
     }
-    
 }
 
 //populates table view

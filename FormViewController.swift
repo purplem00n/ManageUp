@@ -70,10 +70,8 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         muBrain.selectedTags.remove(at: Int(index))
     }
     
-    
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         muBrain.logout(screen: self)
     }
-    
 }
 

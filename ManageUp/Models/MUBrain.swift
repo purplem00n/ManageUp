@@ -13,7 +13,6 @@ import FSCalendar
 import iOSDropDown
 
 class MUBrain {
-    
     let db = Firestore.firestore()
     var datesWithEntry: [DateComponents: Int] = [:]
     var selectedDate: Date = Date.now
@@ -85,7 +84,6 @@ class MUBrain {
                     if let e = error {
                         print(e)
                     } else {
-//                        print(self.date.date)
                         screen.performSegue(withIdentifier: K.submitSegue, sender: self)
                         print("Successfully saved data.")
                     }
@@ -129,7 +127,7 @@ class MUBrain {
                     }
                     DispatchQueue.main.async {
                         tableView.reloadData()
-                        //                            print(self.filteredEntries.count)
+                        //print(self.filteredEntries.count) - if 0, display no results found to user?
                     } // this makes sure the table updates with the most current data.
                 }
             }
@@ -157,7 +155,7 @@ class MUBrain {
                     }
                     DispatchQueue.main.async {
                         tableView.reloadData()
-                        //                            print(self.filteredEntries.count)
+                        // print(self.filteredEntries.count)
                         // display a message if count == 0 ??
                     } // this makes sure the table updates with the most current data.
                 }
@@ -211,7 +209,7 @@ class MUBrain {
             print("Ok button tapped")
         })
         
-        //Add OK and Cancel button to dialog message
+        //Add OK button to dialog message
         dialogMessage.addAction(ok)
         
         // Present dialog message to user
