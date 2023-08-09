@@ -50,13 +50,9 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     }
     
     @IBAction func addTagPressed(_ sender: UIButton) {
-        let tagStyle = TTGTextTagStyle()
-        tagStyle.backgroundColor = UIColor.white
-        tagStyle.borderWidth = 3
-        tagStyle.extraSpace = CGSize(width: 4, height: 4)
         // if tag is not an empty string, create a new tag item, add it to the tag viewer, and add it to the array of selected tags
         if let newTag = tagEntryDropDown.text, tagEntryDropDown.text != "" {
-            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: tagStyle)
+            let textTag = muBrain.createTextTag(tagText: newTag)
             if !muBrain.selectedTags.contains(newTag) {
                 muBrain.selectedTags.append(newTag)
                 ttgTagView.addTag(textTag)

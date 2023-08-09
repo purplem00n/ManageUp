@@ -89,7 +89,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     @IBAction func addTagPressed(_ sender: UIButton) {
         if let newTag = tagSelector.text, tagSelector.text != "" {
             if muBrain.allTags.contains(newTag) {
-                let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: TTGTextTagStyle())
+                let textTag = muBrain.createTextTag(tagText: newTag)
                 ttgTagView.addTag(textTag)
                 ttgTagView.reload()
                 if !muBrain.selectedTags.contains(newTag) {

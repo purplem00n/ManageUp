@@ -11,6 +11,7 @@ import FirebaseCore
 import FirebaseFirestore
 import FSCalendar
 import iOSDropDown
+import TTGTags
 
 class MUBrain {
     let db = Firestore.firestore()
@@ -243,6 +244,14 @@ class MUBrain {
                 }
             }
         }
+    
+    func createTextTag(tagText: String) -> TTGTextTag {
+        let tagStyle = TTGTextTagStyle()
+        tagStyle.backgroundColor = UIColor.white
+        tagStyle.borderWidth = 3
+        tagStyle.extraSpace = CGSize(width: 4, height: 4)
+        return TTGTextTag(content: TTGTextTagStringContent(text: tagText), style: tagStyle)
+    }
     
     func formatDate(date: Date, format: String) -> String {
         let df = DateFormatter()
