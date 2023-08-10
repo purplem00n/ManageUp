@@ -28,6 +28,23 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
         view.addSubview(calendar)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if UIDevice.current.orientation.isLandscape {
+            calendar.scope = .week
+            calendar.frame = CGRect(x: 50, y: 50, width: 700, height: 175)
+            calendar.reloadData()
+        } else {
+            calendar.scope = .month
+            calendar.reloadData()
+        }
+    }
+    
+    // tried this to address the problem of swiping and the date changing to 2073 or 2006
+//    func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
+//            calendar.reloadData()
+//    }
+    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         muBrain.selectedDate = calendar.selectedDate!
     }
