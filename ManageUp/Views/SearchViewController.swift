@@ -115,9 +115,11 @@ extension SearchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell")
+        cell?.textLabel?.font = UIFont(name: "System", size: 14.0)
+        cell?.detailTextLabel?.font = UIFont(name: "System", size: 14.0)
         let dateString = muBrain.formatDate(date: muBrain.filteredEntries[indexPath.row].date, format: K.DateFormat.tableDate)
         cell?.detailTextLabel?.text = dateString
-        cell?.textLabel?.text = String(muBrain.filteredEntries[indexPath.row].text.prefix(33))
+        cell?.textLabel?.text = String(muBrain.filteredEntries[indexPath.row].text.prefix(25))
         return cell!
     }
 }

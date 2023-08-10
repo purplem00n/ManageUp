@@ -86,6 +86,7 @@ class MUBrain {
                         print(e)
                     } else {
                         screen.performSegue(withIdentifier: K.submitSegue, sender: self)
+                        self.selectedTags = []
                         print("Successfully saved data.")
                     }
                 }
@@ -98,6 +99,7 @@ class MUBrain {
                         print(e)
                     } else {
                         screen.performSegue(withIdentifier: K.submitSegue, sender: self)
+                        self.selectedTags = []
                         print("Successfully saved data.")
                     }
                 }
@@ -220,7 +222,7 @@ class MUBrain {
     }
     
     func getAllUserTags(tagSelector: DropDown) {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).addSnapshotListener {
                 (querySnapshot, err) in
     
                 self.allTags = []
@@ -240,6 +242,7 @@ class MUBrain {
                             }
                         }
                     }
+                    self.allTags.sort()
                     tagSelector.optionArray = self.allTags
                 }
             }

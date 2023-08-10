@@ -30,13 +30,10 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         ttgTagView.delegate = self
         
         for tag in muBrain.selectedEntry.tags {
-            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: tag), style: TTGTextTagStyle())
+            let textTag = muBrain.createTextTag(tagText: tag)
             ttgTagView.addTag(textTag)
         }
         ttgTagView.reload()
-        
-//        let tagStyle = TTGTextTagStyle()
-//        tagStyle.backgroundColor = UIColor.white // not working
 
         muBrain.getAllUserTags(tagSelector: tagEntryDropDown)
         // set the drop down menu to display all tags
@@ -75,5 +72,8 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         muBrain.logout(screen: self)
     }
+    
 }
+
+
 
