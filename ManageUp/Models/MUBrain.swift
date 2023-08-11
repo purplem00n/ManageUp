@@ -110,10 +110,11 @@ class MUBrain {
     }
     
     func queryEntriesWithDates(tableView: UITableView) {
+        print(toDateReset, fromDateReset, (Auth.auth().currentUser?.email!)!)
         //query with date params only, desc order by date
-        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
-            
+
             self.queryClosure(querySnapshot: querySnapshot, error: err, tableView: tableView)
         }
     }
@@ -136,6 +137,7 @@ class MUBrain {
             if let snapshotDocuments = querySnapshot?.documents {
                 for doc in snapshotDocuments {
                     let data = doc.data()
+                    print(data)
                     if let text = data[K.FStore.textField] as? String, let user = data[K.FStore.userField] as? String, let tags = data[K.FStore.tagsField] as? [String], let date = data[K.FStore.dateField] as? Timestamp {
                         let date = date.dateValue()
                         let newEntry = Entry(user: user, id: doc.documentID, text: text, tags: tags, date: date)
@@ -144,7 +146,7 @@ class MUBrain {
                 }
                 DispatchQueue.main.async {
                     tableView.reloadData()
-                    // print(self.filteredEntries.count)
+//                     print(self.filteredEntries.count)
                     // display a message if count == 0 ??
                 } // this makes sure the table updates with the most current data.
             }
@@ -170,7 +172,7 @@ class MUBrain {
                 }
                 DispatchQueue.main.async {
                     tableView.reloadData()
-//                            print(self.filteredEntries.count)
+//                    print(self.filteredEntries.count)
                     // display a message if count == 0 ??
                 } // this makes sure the table updates with the most current data.
             }
