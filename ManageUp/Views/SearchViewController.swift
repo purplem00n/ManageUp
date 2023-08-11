@@ -39,9 +39,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
         
         muBrain.loadEntries(fromDate: fromDate, toDate: toDate, tableView: tableView)
         
-        // fromDate displays today's date if there is no selected date and returns all entries
+        // fromDate displays today's date if there is no selected date
         fromDate.date = muBrain.selectedDate
         toDate.date = muBrain.selectedDate
+        
+        muBrain.selectedTags = []
         
         muBrain.getAllUserTags(tagSelector: tagSelector)
     }
@@ -62,7 +64,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     @IBAction func searchButtonPressed(_ sender: UIButton) {
         muBrain.resetDate(fromDate: fromDate.date, toDate: toDate.date)
         
-        if muBrain.selectedTags != [] {
+        //check for text in the search bar.
+        if searchBar.text != "" {
+            muBrain.textSearch(searchText: searchBar.text!, tableView: tableView)
+        } else if muBrain.selectedTags != [] {
             muBrain.queryWithDateTags(tableView: tableView)
         } else {
             muBrain.queryEntriesWithDates(tableView: tableView)
@@ -88,14 +93,14 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     
     @IBAction func addTagPressed(_ sender: UIButton) {
         if let newTag = tagSelector.text, tagSelector.text != "" {
-            if muBrain.allTags.contains(newTag) {
-                let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: TTGTextTagStyle())
+            if muBrain.allTags.contains(newTag), !muBrain.selectedTags.contains(newTag) {
+                let textTag = muBrain.createTextTag(tagText: newTag)
                 ttgTagView.addTag(textTag)
                 ttgTagView.reload()
-                if !muBrain.selectedTags.contains(newTag) {
-                    muBrain.selectedTags.append(newTag)
-                }
+                muBrain.selectedTags.append(newTag)
                 tagSelector.text = ""
+            } else if muBrain.selectedTags.contains(newTag) {
+                muBrain.displayAlert(message: K.AlertMessage.duplicateTag, screen: self)
             } else {
                 muBrain.displayAlert(message: K.AlertMessage.tagError, screen: self)
             }
@@ -115,9 +120,11 @@ extension SearchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReusableCell")
+        cell?.textLabel?.font = UIFont(name: "System", size: 14.0)
+        cell?.detailTextLabel?.font = UIFont(name: "System", size: 14.0)
         let dateString = muBrain.formatDate(date: muBrain.filteredEntries[indexPath.row].date, format: K.DateFormat.tableDate)
         cell?.detailTextLabel?.text = dateString
-        cell?.textLabel?.text = String(muBrain.filteredEntries[indexPath.row].text.prefix(33))
+        cell?.textLabel?.text = String(muBrain.filteredEntries[indexPath.row].text.prefix(25))
         return cell!
     }
 }

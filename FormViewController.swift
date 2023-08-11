@@ -30,7 +30,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
         ttgTagView.delegate = self
         
         for tag in muBrain.selectedEntry.tags {
-            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: tag), style: TTGTextTagStyle())
+            let textTag = muBrain.createTextTag(tagText: tag)
             ttgTagView.addTag(textTag)
         }
         ttgTagView.reload()
@@ -43,19 +43,23 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     }
     
     @IBAction func submitPressed(_ sender: UIButton) {
-        muBrain.handleSubmission(entryText: entryText.text, screen: self)
+        muBrain.handleSubmission(entryText: entryText.text, entryDate: date.date, screen: self)
     }
     
     @IBAction func addTagPressed(_ sender: UIButton) {
         // if tag is not an empty string, create a new tag item, add it to the tag viewer, and add it to the array of selected tags
         if let newTag = tagEntryDropDown.text, tagEntryDropDown.text != "" {
-            let textTag = TTGTextTag(content: TTGTextTagStringContent(text: newTag), style: TTGTextTagStyle())
-            ttgTagView.addTag(textTag)
-            ttgTagView.reload()
+            let textTag = muBrain.createTextTag(tagText: newTag)
             if !muBrain.selectedTags.contains(newTag) {
                 muBrain.selectedTags.append(newTag)
+                ttgTagView.addTag(textTag)
+                ttgTagView.reload()
+            } else {
+                muBrain.displayAlert(message: K.AlertMessage.duplicateTag, screen: self)
             }
             tagEntryDropDown.text = ""
+        } else {
+            muBrain.displayAlert(message: K.AlertMessage.tagError, screen: self)
         }
     }
     
@@ -70,5 +74,8 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     @IBAction func logoutPressed(_ sender: UIBarButtonItem) {
         muBrain.logout(screen: self)
     }
+    
 }
+
+
 

@@ -11,6 +11,7 @@ import FirebaseCore
 import FirebaseFirestore
 import FSCalendar
 import iOSDropDown
+import TTGTags
 
 class MUBrain {
     let db = Firestore.firestore()
@@ -55,6 +56,33 @@ class MUBrain {
         fromDateReset = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: fromDate)!
         toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: toDate)!
         todayMidnight = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date.now)!
+        
+//        let calendar = Calendar.current
+//        let timeZone = TimeZone.current
+//        let fromDateComponents = calendar.dateComponents(in: timeZone, from: fromDate)
+//
+//        let fromDateyear = fromDateComponents.year!
+//        let fromDatemonth = fromDateComponents.month!
+//        let fromDateday = fromDateComponents.day!
+//
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//        dateFormatter.timeZone = timeZone
+//
+//        let fromDateString = "\(fromDateyear)-\(fromDatemonth)-\(fromDateday) 00:00:00"
+//        let fromDateReset = dateFormatter.date(from: fromDateString)
+//
+//        let toDateComponents = calendar.dateComponents(in: timeZone, from: toDate)
+//
+//        let toDateyear = toDateComponents.year!
+//        let toDatemonth = toDateComponents.month!
+//        let toDateday = toDateComponents.day!
+//
+//        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//        dateFormatter.timeZone = timeZone
+//
+//        let toDateString = "\(toDateyear)-\(toDatemonth)-\(toDateday) 00:00:00"
+//        let toDateReset = dateFormatter.date(from: toDateString)
     }
     
     func convertDateToDateComponents(date: Date) -> DateComponents {
@@ -71,7 +99,7 @@ class MUBrain {
         queryEntriesWithDates(tableView: tableView)
     }
     
-    func handleSubmission(entryText: String?, screen: UIViewController) {
+    func handleSubmission(entryText: String?, entryDate: Date, screen: UIViewController) {
         // if text box is empty, display alert and do not submit
         if entryText == "" {
             displayAlert(message:K.AlertMessage.noTextError, screen: screen)
@@ -80,7 +108,7 @@ class MUBrain {
         // To add a new entry
         if selectedEntry.id == "" {
             if let textBody = entryText, let user = Auth.auth().currentUser?.email {
-                db.collection(K.FStore.collectionName).document().setData([K.FStore.textField: textBody, K.FStore.dateField: selectedDate, K.FStore.userField: user, K.FStore.tagsField: selectedTags]) { (error) in
+                db.collection(K.FStore.collectionName).document().setData([K.FStore.textField: textBody, K.FStore.dateField: entryDate, K.FStore.userField: user, K.FStore.tagsField: selectedTags]) { (error) in
                     if let e = error {
                         print(e)
                     } else {
@@ -107,17 +135,18 @@ class MUBrain {
     }
     
     func queryEntriesWithDates(tableView: UITableView) {
+        print(toDateReset, fromDateReset, (Auth.auth().currentUser?.email!)!)
         //query with date params only, desc order by date
-        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
-            
+
             self.queryClosure(querySnapshot: querySnapshot, error: err, tableView: tableView)
         }
     }
     
     func queryWithDateTags(tableView: UITableView) {
         // query with date and tag
-        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
             
             self.queryClosure(querySnapshot: querySnapshot, error: err, tableView: tableView)
@@ -141,9 +170,25 @@ class MUBrain {
                 }
                 DispatchQueue.main.async {
                     tableView.reloadData()
-                    // print(self.filteredEntries.count)
+//                     print(self.filteredEntries.count)
                     // display a message if count == 0 ??
                 } // this makes sure the table updates with the most current data.
+            }
+        }
+    }
+    
+    func textSearch(searchText: String, tableView: UITableView) {
+        if selectedTags != [] {
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+                (querySnapshot, err) in
+                
+                self.queryClosureWithText(querySnapshot: querySnapshot, error: err, tableView: tableView, searchText: searchText)
+            }
+        } else {
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+                (querySnapshot, err) in
+                
+                self.queryClosureWithText(querySnapshot: querySnapshot, error: err, tableView: tableView, searchText: searchText)
             }
         }
     }
@@ -167,25 +212,9 @@ class MUBrain {
                 }
                 DispatchQueue.main.async {
                     tableView.reloadData()
-//                            print(self.filteredEntries.count)
+//                    print(self.filteredEntries.count)
                     // display a message if count == 0 ??
                 } // this makes sure the table updates with the most current data.
-            }
-        }
-    }
-    
-    func textSearch(searchText: String, tableView: UITableView) {
-        if selectedTags != [] {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-                (querySnapshot, err) in
-                
-                self.queryClosureWithText(querySnapshot: querySnapshot, error: err, tableView: tableView, searchText: searchText)
-            }
-        } else {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThan: fromDateReset).whereField(K.FStore.dateField, isLessThan: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
-                (querySnapshot, err) in
-                
-                self.queryClosureWithText(querySnapshot: querySnapshot, error: err, tableView: tableView, searchText: searchText)
             }
         }
     }
@@ -219,7 +248,7 @@ class MUBrain {
     }
     
     func getAllUserTags(tagSelector: DropDown) {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).addSnapshotListener {
                 (querySnapshot, err) in
     
                 self.allTags = []
@@ -239,10 +268,19 @@ class MUBrain {
                             }
                         }
                     }
+                    self.allTags.sort()
                     tagSelector.optionArray = self.allTags
                 }
             }
         }
+    
+    func createTextTag(tagText: String) -> TTGTextTag {
+        let tagStyle = TTGTextTagStyle()
+        tagStyle.backgroundColor = UIColor.white
+        tagStyle.borderWidth = 3
+        tagStyle.extraSpace = CGSize(width: 4, height: 4)
+        return TTGTextTag(content: TTGTextTagStringContent(text: tagText), style: tagStyle)
+    }
     
     func formatDate(date: Date, format: String) -> String {
         let df = DateFormatter()
@@ -251,6 +289,8 @@ class MUBrain {
     }
     
     func resetSelectedEntry() {
+        print("resetting saved data")
+        selectedTags = []
         selectedEntry = Entry(user: "", id: "", text: "", tags: [], date: Date.now)
     }
     
