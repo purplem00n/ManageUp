@@ -84,10 +84,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     }
     
     func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
-        print("ttg tag view size")
-        print(ttgTagView.contentSize)
-        print("selected tags")
-        print(muBrain.selectedTags)
         // remove tags on tap
         ttgTagView.removeTag(tag)
         ttgTagView.reload()
