@@ -39,9 +39,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
         
         muBrain.loadEntries(fromDate: fromDate, toDate: toDate, tableView: tableView)
         
-        // fromDate displays today's date if there is no selected date and returns all entries
+        // fromDate displays today's date if there is no selected date
         fromDate.date = muBrain.selectedDate
         toDate.date = muBrain.selectedDate
+        
+        muBrain.selectedTags = []
         
         muBrain.getAllUserTags(tagSelector: tagSelector)
     }
@@ -62,7 +64,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     @IBAction func searchButtonPressed(_ sender: UIButton) {
         muBrain.resetDate(fromDate: fromDate.date, toDate: toDate.date)
         
-        if muBrain.selectedTags != [] {
+        //check for text in the search bar.
+        if searchBar.text != "" {
+            muBrain.textSearch(searchText: searchBar.text!, tableView: tableView)
+        } else if muBrain.selectedTags != [] {
             muBrain.queryWithDateTags(tableView: tableView)
         } else {
             muBrain.queryEntriesWithDates(tableView: tableView)
@@ -79,6 +84,10 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     }
     
     func textTagCollectionView(_ textTagCollectionView: TTGTextTagCollectionView!, didTap tag: TTGTextTag!, at index: UInt) {
+        print("ttg tag view size")
+        print(ttgTagView.contentSize)
+        print("selected tags")
+        print(muBrain.selectedTags)
         // remove tags on tap
         ttgTagView.removeTag(tag)
         ttgTagView.reload()
@@ -88,14 +97,14 @@ class SearchViewController: UIViewController, UISearchBarDelegate, TTGTextTagCol
     
     @IBAction func addTagPressed(_ sender: UIButton) {
         if let newTag = tagSelector.text, tagSelector.text != "" {
-            if muBrain.allTags.contains(newTag) {
+            if muBrain.allTags.contains(newTag), !muBrain.selectedTags.contains(newTag) {
                 let textTag = muBrain.createTextTag(tagText: newTag)
                 ttgTagView.addTag(textTag)
                 ttgTagView.reload()
-                if !muBrain.selectedTags.contains(newTag) {
-                    muBrain.selectedTags.append(newTag)
-                }
+                muBrain.selectedTags.append(newTag)
                 tagSelector.text = ""
+            } else if muBrain.selectedTags.contains(newTag) {
+                muBrain.displayAlert(message: K.AlertMessage.duplicateTag, screen: self)
             } else {
                 muBrain.displayAlert(message: K.AlertMessage.tagError, screen: self)
             }

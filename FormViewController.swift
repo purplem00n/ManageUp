@@ -43,7 +43,7 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
     }
     
     @IBAction func submitPressed(_ sender: UIButton) {
-        muBrain.handleSubmission(entryText: entryText.text, screen: self)
+        muBrain.handleSubmission(entryText: entryText.text, entryDate: date.date, screen: self)
     }
     
     @IBAction func addTagPressed(_ sender: UIButton) {
@@ -58,6 +58,8 @@ class FormViewController: UIViewController, TTGTextTagCollectionViewDelegate {
                 muBrain.displayAlert(message: K.AlertMessage.duplicateTag, screen: self)
             }
             tagEntryDropDown.text = ""
+        } else {
+            muBrain.displayAlert(message: K.AlertMessage.tagError, screen: self)
         }
     }
     

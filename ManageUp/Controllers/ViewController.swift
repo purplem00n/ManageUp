@@ -25,7 +25,7 @@ class HomeViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSo
         
         calendar.dataSource = self
         calendar.delegate = self
-        view.addSubview(calendar)
+//        view.addSubview(calendar)
     }
     
 //    override func viewDidLayoutSubviews() {
