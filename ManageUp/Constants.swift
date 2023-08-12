@@ -18,6 +18,7 @@ struct K {
     
     struct FStore {
         static let collectionName = "entries"
+        static let userCollection = "users"
         static let userField = "user"
         static let textField = "text"
         static let dateField = "date"
