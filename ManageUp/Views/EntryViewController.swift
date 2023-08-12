@@ -28,6 +28,11 @@ class EntryViewController: UIViewController {
         performSegue(withIdentifier: K.editSegue, sender: self)
     }
     
+    @IBAction func deleteButtonPressed(_ sender: UIButton) {
+        muBrain.deleteEntry(screen: self)
+//        performSegue(withIdentifier: K.deleteSegue, sender: self)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == K.editSegue {
             if let formViewController = segue.destination as? FormViewController {

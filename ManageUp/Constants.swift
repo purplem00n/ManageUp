@@ -15,6 +15,7 @@ struct K {
     static let entrySegue = "SearchToEntry"
     static let editSegue = "EntryToForm"
     static let submitSegue = "FormToHome"
+    static let deleteSegue = "EntryToHome"
     
     struct FStore {
         static let collectionName = "entries"
@@ -28,9 +29,11 @@ struct K {
     
     struct AlertMessage {
         static let errorTitle = "Error"
+        static let deleteTitle = "Delete Entry"
         static let tagError = "You must choose an existing tag"
         static let noTextError = "Please add text to your entry"
         static let duplicateTag = "This tag has already been added"
+        static let verifyDeletion = "Are you sure you want to delete this entry?"
     }
     
     struct DateFormat {

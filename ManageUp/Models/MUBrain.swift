@@ -287,6 +287,36 @@ class MUBrain {
         }
     }
     
+    func deleteEntry(screen: UIViewController) {
+        let userId = (currentUser?.uid)!
+        // Declare Alert message
+        let dialogMessage = UIAlertController(title: K.AlertMessage.deleteTitle, message: K.AlertMessage.verifyDeletion, preferredStyle: .alert)
+        
+        // Create OK button with action handler
+        let ok = UIAlertAction(title: "Yes", style: .default, handler: { (action) -> Void in
+            self.db.collection(K.FStore.userCollection).document(userId).collection(K.FStore.collectionName).document(self.selectedEntry.id).delete() { err in
+                if let err = err {
+                    print("Error removing document: \(err)")
+                } else {
+                    screen.performSegue(withIdentifier: K.deleteSegue, sender: screen)
+                    print("Document successfully removed!")
+                }
+            }
+            print("Ok button tapped")
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) -> Void in
+            print("Cancel button tapped")
+        }
+        
+        //Add OK and cancel button to dialog message
+        dialogMessage.addAction(ok)
+        dialogMessage.addAction(cancel)
+        
+        // Present dialog message to user
+        screen.present(dialogMessage, animated: true, completion: nil)
+    }
+    
     func createTextTag(tagText: String) -> TTGTextTag {
         let tagStyle = TTGTextTagStyle()
         tagStyle.backgroundColor = UIColor.white
