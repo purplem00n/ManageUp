@@ -26,29 +26,33 @@ class MUBrain {
     var toDateReset: Date = Date.now
     var todayMidnight: Date = Date.now
     
+    let currentUser = Auth.auth().currentUser
+    
     
     func findDatesWithEntries(_ calendar: FSCalendar) {
-        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).getDocuments() {
-                (querySnapshot, err) in
-
-                self.datesWithEntry = [:]
-
-                if let e = err {
-                    print("Error getting documents: \(e)")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            if let date = data[K.FStore.dateField] as? Timestamp {
-                                let date = date.dateValue()
-                                let dateComponents = Calendar.current.dateComponents([.month, .day, .year], from: date)
-                                self.datesWithEntry[dateComponents] = (self.datesWithEntry[dateComponents] ?? 0) + 1
-                            }
+        let userId = (currentUser?.uid)!
+        
+        db.collection(K.FStore.userCollection).document(userId).collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).getDocuments() {
+            (querySnapshot, err) in
+            
+            self.datesWithEntry = [:]
+            
+            if let e = err {
+                print("Error getting documents: \(e)")
+            } else {
+                if let snapshotDocuments = querySnapshot?.documents {
+                    for doc in snapshotDocuments {
+                        let data = doc.data()
+                        if let date = data[K.FStore.dateField] as? Timestamp {
+                            let date = date.dateValue()
+                            let dateComponents = Calendar.current.dateComponents([.month, .day, .year], from: date)
+                            self.datesWithEntry[dateComponents] = (self.datesWithEntry[dateComponents] ?? 0) + 1
                         }
                     }
-                    calendar.reloadData()
                 }
+                calendar.reloadData()
             }
+        }
     }
     
     func resetDate(fromDate: Date, toDate: Date) {
@@ -57,32 +61,32 @@ class MUBrain {
         toDateReset = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: toDate)!
         todayMidnight = calendar.date(bySettingHour: 0, minute: 0, second: 0, of: Date.now)!
         
-//        let calendar = Calendar.current
-//        let timeZone = TimeZone.current
-//        let fromDateComponents = calendar.dateComponents(in: timeZone, from: fromDate)
-//
-//        let fromDateyear = fromDateComponents.year!
-//        let fromDatemonth = fromDateComponents.month!
-//        let fromDateday = fromDateComponents.day!
-//
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//        dateFormatter.timeZone = timeZone
-//
-//        let fromDateString = "\(fromDateyear)-\(fromDatemonth)-\(fromDateday) 00:00:00"
-//        let fromDateReset = dateFormatter.date(from: fromDateString)
-//
-//        let toDateComponents = calendar.dateComponents(in: timeZone, from: toDate)
-//
-//        let toDateyear = toDateComponents.year!
-//        let toDatemonth = toDateComponents.month!
-//        let toDateday = toDateComponents.day!
-//
-//        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//        dateFormatter.timeZone = timeZone
-//
-//        let toDateString = "\(toDateyear)-\(toDatemonth)-\(toDateday) 00:00:00"
-//        let toDateReset = dateFormatter.date(from: toDateString)
+        //        let calendar = Calendar.current
+        //        let timeZone = TimeZone.current
+        //        let fromDateComponents = calendar.dateComponents(in: timeZone, from: fromDate)
+        //
+        //        let fromDateyear = fromDateComponents.year!
+        //        let fromDatemonth = fromDateComponents.month!
+        //        let fromDateday = fromDateComponents.day!
+        //
+        //        let dateFormatter = DateFormatter()
+        //        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        //        dateFormatter.timeZone = timeZone
+        //
+        //        let fromDateString = "\(fromDateyear)-\(fromDatemonth)-\(fromDateday) 00:00:00"
+        //        let fromDateReset = dateFormatter.date(from: fromDateString)
+        //
+        //        let toDateComponents = calendar.dateComponents(in: timeZone, from: toDate)
+        //
+        //        let toDateyear = toDateComponents.year!
+        //        let toDatemonth = toDateComponents.month!
+        //        let toDateday = toDateComponents.day!
+        //
+        //        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        //        dateFormatter.timeZone = timeZone
+        //
+        //        let toDateString = "\(toDateyear)-\(toDatemonth)-\(toDateday) 00:00:00"
+        //        let toDateReset = dateFormatter.date(from: toDateString)
     }
     
     func convertDateToDateComponents(date: Date) -> DateComponents {
@@ -100,6 +104,8 @@ class MUBrain {
     }
     
     func handleSubmission(entryText: String?, entryDate: Date, screen: UIViewController) {
+        let userId = (currentUser?.uid)!
+        
         // if text box is empty, display alert and do not submit
         if entryText == "" {
             displayAlert(message:K.AlertMessage.noTextError, screen: screen)
@@ -108,7 +114,7 @@ class MUBrain {
         // To add a new entry
         if selectedEntry.id == "" {
             if let textBody = entryText, let user = Auth.auth().currentUser?.email {
-                db.collection(K.FStore.collectionName).document().setData([K.FStore.textField: textBody, K.FStore.dateField: entryDate, K.FStore.userField: user, K.FStore.tagsField: selectedTags]) { (error) in
+                db.collection(K.FStore.userCollection).document(userId).collection(K.FStore.collectionName).document().setData([K.FStore.textField: textBody, K.FStore.dateField: entryDate, K.FStore.userField: user, K.FStore.tagsField: selectedTags]) { (error) in
                     if let e = error {
                         print(e)
                     } else {
@@ -120,7 +126,7 @@ class MUBrain {
             // edit an existing entry
         } else {
             if let textBody = entryText, let user = Auth.auth().currentUser?.email {
-                db.collection(K.FStore.collectionName).document(selectedEntry.id).setData([K.FStore.textField: textBody, K.FStore.dateField: selectedEntry.date, K.FStore.userField: user, K.FStore.tagsField: selectedTags]) { (error) in
+                db.collection(K.FStore.userCollection).document(userId).collection(K.FStore.collectionName).document(selectedEntry.id).setData([K.FStore.textField: textBody, K.FStore.dateField: selectedEntry.date, K.FStore.userField: user, K.FStore.tagsField: selectedTags]) { (error) in
                     if let e = error {
                         print(e)
                     } else {
@@ -135,18 +141,21 @@ class MUBrain {
     }
     
     func queryEntriesWithDates(tableView: UITableView) {
-        print(toDateReset, fromDateReset, (Auth.auth().currentUser?.email!)!)
+        let userId = (currentUser?.uid)!
+        
         //query with date params only, desc order by date
-        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+        db.collection(K.FStore.userCollection).document(userId).collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
-
+            
             self.queryClosure(querySnapshot: querySnapshot, error: err, tableView: tableView)
         }
     }
     
     func queryWithDateTags(tableView: UITableView) {
+        let userId = (currentUser?.uid)!
+        
         // query with date and tag
-        db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+        db.collection(K.FStore.userCollection).document(userId).collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
             (querySnapshot, err) in
             
             self.queryClosure(querySnapshot: querySnapshot, error: err, tableView: tableView)
@@ -155,7 +164,7 @@ class MUBrain {
     
     func queryClosure(querySnapshot: QuerySnapshot?, error: Error?, tableView: UITableView) {
         self.filteredEntries = []
-
+        
         if let e = error {
             print("Error getting documents: \(e)")
         } else {
@@ -170,7 +179,7 @@ class MUBrain {
                 }
                 DispatchQueue.main.async {
                     tableView.reloadData()
-//                     print(self.filteredEntries.count)
+                    print(self.filteredEntries.count)
                     // display a message if count == 0 ??
                 } // this makes sure the table updates with the most current data.
             }
@@ -178,14 +187,16 @@ class MUBrain {
     }
     
     func textSearch(searchText: String, tableView: UITableView) {
+        let userId = (currentUser?.uid)!
+        
         if selectedTags != [] {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+            db.collection(K.FStore.userCollection).document(userId).collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).whereField(K.FStore.tagsField, arrayContainsAny: selectedTags).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
                 (querySnapshot, err) in
                 
                 self.queryClosureWithText(querySnapshot: querySnapshot, error: err, tableView: tableView, searchText: searchText)
             }
         } else {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
+            db.collection(K.FStore.userCollection).document(userId).collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: (Auth.auth().currentUser?.email!)!).whereField(K.FStore.dateField, isGreaterThanOrEqualTo: fromDateReset).whereField(K.FStore.dateField, isLessThanOrEqualTo: toDateReset).order(by: K.FStore.dateField, descending: true).addSnapshotListener {
                 (querySnapshot, err) in
                 
                 self.queryClosureWithText(querySnapshot: querySnapshot, error: err, tableView: tableView, searchText: searchText)
@@ -195,7 +206,7 @@ class MUBrain {
     
     func queryClosureWithText(querySnapshot: QuerySnapshot?, error: Error?, tableView: UITableView, searchText: String) {
         self.filteredEntries = []
-
+        
         if let e = error {
             print("Error getting documents: \(e)")
         } else {
@@ -212,7 +223,7 @@ class MUBrain {
                 }
                 DispatchQueue.main.async {
                     tableView.reloadData()
-//                    print(self.filteredEntries.count)
+                    //                    print(self.filteredEntries.count)
                     // display a message if count == 0 ??
                 } // this makes sure the table updates with the most current data.
             }
@@ -248,31 +259,33 @@ class MUBrain {
     }
     
     func getAllUserTags(tagSelector: DropDown) {
-            db.collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).addSnapshotListener {
-                (querySnapshot, err) in
-    
-                self.allTags = []
-    
-                if let e = err {
-                    print("Error getting documents: \(e)")
-                } else {
-                    if let snapshotDocuments = querySnapshot?.documents {
-                        for doc in snapshotDocuments {
-                            let data = doc.data()
-                            if let tags = data[K.FStore.tagsField] as? [String] {
-                                for tag in tags {
-                                    if !self.allTags.contains(tag) {
-                                        self.allTags.append(tag)
-                                    }
+        let userId = (currentUser?.uid)!
+        
+        db.collection(K.FStore.userCollection).document(userId).collection(K.FStore.collectionName).whereField(K.FStore.userField, isEqualTo: Auth.auth().currentUser?.email!).addSnapshotListener {
+            (querySnapshot, err) in
+            
+            self.allTags = []
+            
+            if let e = err {
+                print("Error getting documents: \(e)")
+            } else {
+                if let snapshotDocuments = querySnapshot?.documents {
+                    for doc in snapshotDocuments {
+                        let data = doc.data()
+                        if let tags = data[K.FStore.tagsField] as? [String] {
+                            for tag in tags {
+                                if !self.allTags.contains(tag) {
+                                    self.allTags.append(tag)
                                 }
                             }
                         }
                     }
-                    self.allTags.sort()
-                    tagSelector.optionArray = self.allTags
                 }
+                self.allTags.sort()
+                tagSelector.optionArray = self.allTags
             }
         }
+    }
     
     func createTextTag(tagText: String) -> TTGTextTag {
         let tagStyle = TTGTextTagStyle()
@@ -303,4 +316,4 @@ class MUBrain {
         }
     }
 }
-    
+
