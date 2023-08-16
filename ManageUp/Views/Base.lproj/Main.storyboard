@@ -361,22 +361,22 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8AS-fh-Ake">
-                                <rect key="frame" x="3.6666666666666572" y="683" width="367.66666666666674" height="60"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="8AS-fh-Ake">
+                                <rect key="frame" x="30" y="683" width="315" height="60"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Tags" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3Xf-xy-fXn">
-                                        <rect key="frame" x="0.0" y="0.0" width="250" height="60"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="175" height="60"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="4xr-aG-wsn"/>
-                                            <constraint firstAttribute="width" constant="250" id="fm0-lr-E13"/>
+                                            <constraint firstAttribute="width" constant="175" id="fm0-lr-E13"/>
                                         </constraints>
                                         <color key="textColor" systemColor="labelColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M3t-fu-BOD">
-                                        <rect key="frame" x="249.99999999999997" y="0.0" width="117.66666666666666" height="60"/>
+                                        <rect key="frame" x="189" y="0.0" width="126" height="60"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Delete Entry"/>
                                         <connections>
@@ -393,6 +393,8 @@
                             <constraint firstItem="pA6-0D-gqH" firstAttribute="bottom" secondItem="8AS-fh-Ake" secondAttribute="bottom" constant="10" id="8XM-dy-Yyc"/>
                             <constraint firstItem="t7N-kj-kz4" firstAttribute="leading" secondItem="pA6-0D-gqH" secondAttribute="leading" constant="30" id="B4G-cd-7ba"/>
                             <constraint firstItem="pA6-0D-gqH" firstAttribute="trailing" secondItem="5S2-zt-wyD" secondAttribute="trailing" constant="30" id="DJJ-Pl-6pN"/>
+                            <constraint firstItem="pA6-0D-gqH" firstAttribute="trailing" secondItem="8AS-fh-Ake" secondAttribute="trailing" constant="30" id="IVJ-fj-pxH"/>
+                            <constraint firstItem="8AS-fh-Ake" firstAttribute="leading" secondItem="pA6-0D-gqH" secondAttribute="leading" constant="30" id="Z1N-gu-xO2"/>
                             <constraint firstItem="Ev9-kQ-nOn" firstAttribute="leading" secondItem="pA6-0D-gqH" secondAttribute="leading" constant="30" id="bbK-9c-nbX"/>
                             <constraint firstItem="5S2-zt-wyD" firstAttribute="top" secondItem="pA6-0D-gqH" secondAttribute="top" constant="20" id="eGm-i6-X8E"/>
                             <constraint firstItem="t7N-kj-kz4" firstAttribute="top" secondItem="pA6-0D-gqH" secondAttribute="top" constant="20" id="gEe-O7-yn0"/>
@@ -412,7 +414,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zME-FX-EMj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4372" y="-328"/>
+            <point key="canvasLocation" x="4372" y="-328.07881773399015"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="E8b-gu-CBM">
@@ -575,18 +577,15 @@
                                 </constraints>
                             </datePicker>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aKx-tc-d9O">
-                                <rect key="frame" x="25" y="70" width="325" height="40"/>
+                                <rect key="frame" x="20.000000000000007" y="70" width="110.66666666666669" height="40"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Tags" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nbg-6o-FGF" customClass="JRDropDown">
-                                        <rect key="frame" x="0.0" y="0.0" width="250" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="250" id="CXT-2j-feh"/>
-                                        </constraints>
+                                        <rect key="frame" x="0.0" y="0.0" width="58.666666666666664" height="40"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Jm-Kr-1X8">
-                                        <rect key="frame" x="250" y="0.0" width="75" height="40"/>
+                                        <rect key="frame" x="58.666666666666686" y="0.0" width="52" height="40"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="filled" title="+">
                                             <fontDescription key="titleFontDescription" type="system" weight="black" pointSize="40"/>
@@ -599,12 +598,12 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="325" id="dkw-2g-Ptb"/>
+                                    <constraint firstAttribute="width" constant="330" id="dkw-2g-Ptb"/>
                                     <constraint firstAttribute="height" constant="40" id="fg5-ee-i8L"/>
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LqA-wm-I9G" customClass="TTGTextTagCollectionView">
-                                <rect key="frame" x="37.666666666666657" y="120" width="300" height="60"/>
+                                <rect key="frame" x="-74.666666666666671" y="120" width="300" height="60"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="HUJ-Xh-K47"/>
@@ -612,7 +611,7 @@
                                 </constraints>
                             </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="aOt-5W-dz4">
-                                <rect key="frame" x="20" y="190" width="335" height="478"/>
+                                <rect key="frame" x="20.000000000000007" y="190" width="110.66666666666669" height="478"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" systemColor="labelColor"/>
@@ -620,7 +619,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" enablesReturnKeyAutomatically="YES"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="08J-Sh-Gfm">
-                                <rect key="frame" x="112.66666666666669" y="688" width="150" height="45"/>
+                                <rect key="frame" x="0.3333333333333286" y="688" width="150" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="5x1-Cm-rqg"/>
                                     <constraint firstAttribute="height" constant="45" id="gZh-Sn-zKV"/>
@@ -639,17 +638,19 @@
                         <color key="backgroundColor" red="0.77254901960784317" green="0.87450980392156863" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="36v-8R-KpN" firstAttribute="bottom" secondItem="08J-Sh-Gfm" secondAttribute="bottom" constant="50" id="DVa-6P-1yz"/>
+                            <constraint firstItem="aKx-tc-d9O" firstAttribute="leading" secondItem="36v-8R-KpN" secondAttribute="leading" constant="20" id="Gp3-41-8Bo"/>
                             <constraint firstItem="aKx-tc-d9O" firstAttribute="centerX" secondItem="Xh0-4a-0jT" secondAttribute="centerX" id="QVf-se-Rnu"/>
                             <constraint firstItem="aOt-5W-dz4" firstAttribute="top" secondItem="LqA-wm-I9G" secondAttribute="bottom" constant="10" id="Ql7-2o-xnu"/>
                             <constraint firstItem="36v-8R-KpN" firstAttribute="bottom" secondItem="08J-Sh-Gfm" secondAttribute="bottom" constant="20" id="Rd2-Lk-y4c"/>
-                            <constraint firstItem="G13-m6-242" firstAttribute="centerX" secondItem="Xh0-4a-0jT" secondAttribute="centerX" id="Rha-TS-tLA"/>
                             <constraint firstItem="LqA-wm-I9G" firstAttribute="top" secondItem="aKx-tc-d9O" secondAttribute="bottom" constant="10" id="ZVL-5I-BO8"/>
+                            <constraint firstItem="G13-m6-242" firstAttribute="leading" secondItem="36v-8R-KpN" secondAttribute="leading" constant="20" id="abA-7L-xgV"/>
                             <constraint firstItem="aOt-5W-dz4" firstAttribute="leading" secondItem="36v-8R-KpN" secondAttribute="leading" constant="20" id="acG-fI-RuM"/>
                             <constraint firstItem="aKx-tc-d9O" firstAttribute="top" secondItem="G13-m6-242" secondAttribute="bottom" constant="20" id="dNX-Ux-9kH"/>
                             <constraint firstItem="LqA-wm-I9G" firstAttribute="centerX" secondItem="Xh0-4a-0jT" secondAttribute="centerX" id="eH3-qD-VtB"/>
                             <constraint firstItem="08J-Sh-Gfm" firstAttribute="centerX" secondItem="Xh0-4a-0jT" secondAttribute="centerX" id="jOh-0k-PjL"/>
                             <constraint firstItem="G13-m6-242" firstAttribute="top" secondItem="36v-8R-KpN" secondAttribute="top" constant="10" id="oWT-M1-TvY"/>
                             <constraint firstItem="36v-8R-KpN" firstAttribute="trailing" secondItem="aOt-5W-dz4" secondAttribute="trailing" constant="20" id="pg0-8M-ptf"/>
+                            <constraint firstItem="36v-8R-KpN" firstAttribute="trailing" secondItem="aKx-tc-d9O" secondAttribute="trailing" constant="20" id="tOb-j8-eTg"/>
                             <constraint firstItem="08J-Sh-Gfm" firstAttribute="top" secondItem="aOt-5W-dz4" secondAttribute="bottom" constant="20" id="xs7-gJ-o04"/>
                         </constraints>
                     </view>
@@ -693,7 +694,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="YRQ-7s-bgN"/>
-        <segue reference="fKX-3x-15D"/>
+        <segue reference="hb0-H3-mZL"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.up" catalog="system" width="118" height="128"/>
